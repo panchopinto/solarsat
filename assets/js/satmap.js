@@ -5,6 +5,29 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   attribution:'© OpenStreetMap'
 }).addTo(map);
 let positionMarker = null;
+
+// Helpers for regime and color
+function regimeFromAlt(altKm){
+  if (altKm < 2000) return 'LEO';
+  if (altKm < 35786 - 1000) return 'MEO';
+  if (Math.abs(altKm - 35786) <= 1000) return 'GEO';
+  return altKm >= 35786 ? 'HEO/GEO+' : 'LEO';
+}
+function colorByRegime(reg){
+  if (reg==='LEO') return '#60a5fa'; // blue
+  if (reg==='MEO') return '#f59e0b'; // amber
+  if (reg==='GEO') return '#10b981'; // green
+  return '#e5e7eb';
+}
+function updateHUD({name, lat, lon, alt, inc, type}){
+  document.getElementById('hudName').textContent = name || '—';
+  document.getElementById('hudLat').textContent = (lat!=null? lat.toFixed(2): '—');
+  document.getElementById('hudLon').textContent = (lon!=null? lon.toFixed(2): '—');
+  document.getElementById('hudAlt').textContent = (alt!=null? alt.toFixed(0): '—');
+  document.getElementById('hudInc').textContent = (inc!=null? inc.toFixed(1): '—');
+  document.getElementById('hudType').textContent = type || '—';
+}
+
 let trackLine = null;
 let lastGeoJSON = null;
 
@@ -90,14 +113,21 @@ async function drawFor(norad){
   const lon = satellite.degreesLong(geo.longitude);
 
   if(positionMarker){ map.removeLayer(positionMarker); }
-  positionMarker = L.marker([lat,lon], { title: `${tle.name}` }).addTo(map)
-    .bindPopup(`<b>${tle.name}</b><br/>Alt ≈ ${alt.toFixed(0)} km<br/>Inc ≈ ${inc.toFixed(1)}°`).openPopup();
-  map.panTo([lat,lon], { animate:true });
+  const reg = regimeFromAlt(alt);
+  const color = colorByRegime(reg);
+  const icon = L.divIcon({className:'', html:`<div style="width:14px;height:14px;border-radius:50%;background:${color};box-shadow:0 0 8px ${color};border:1px solid rgba(255,255,255,.6)"></div>`});
+  
+  positionMarker = L.marker([lat,lon], { title: `${tle.name}`, icon }).addTo(map)
+    .bindPopup(`<b>${tle.name}</b><br/>Alt ≈ ${alt.toFixed(0)} km<br/>Inc ≈ ${inc.toFixed(1)}°<br/>${reg}`);
+  if(document.getElementById('followSat').checked){
+    map.panTo([lat,lon], { animate:true });
+  }
+  updateHUD({name: tle.name, lat, lon, alt, inc, type: reg});
 
   if(trackLine){ map.removeLayer(trackLine); trackLine=null; }
   if(document.getElementById('drawTrack').checked){
     const pts = groundTrack(satrec, 90, 60);
-    trackLine = L.polyline(pts, { weight:2, opacity:0.8 }).addTo(map);
+    trackLine = L.polyline(pts, { weight:2, opacity:0.9, color: colorByRegime(reg) }).addTo(map);
     lastGeoJSON = {
       type: 'FeatureCollection',
       features: [{
@@ -166,6 +196,34 @@ function applyAuto(){
 }
 document.getElementById('autoRefresh').addEventListener('change', applyAuto);
 applyAuto();
+
+
+document.getElementById('btnSearch').addEventListener('click', ()=>{
+  const q = document.getElementById('qSearch').value.trim();
+  if(!q) return;
+  const select = document.getElementById('satSelect');
+  // 1) If numeric, assume NORAD direct
+  if(/^\d+$/.test(q)){
+    // If not present, insert temp option
+    let opt = Array.from(select.options).find(o=>o.value===q);
+    if(!opt){
+      opt = document.createElement('option'); opt.value=q; opt.textContent=`NORAD ${q}`;
+      select.insertBefore(opt, select.firstChild);
+    }
+    select.value = q; drawFor(q);
+    return;
+  }
+  // 2) Try to find by name in current list
+  const found = Array.from(select.options).find(o=>o.textContent.toLowerCase().includes(q.toLowerCase()));
+  if(found){ select.value = found.value; drawFor(found.value); return; }
+  // 3) If not in list, fetch Active and search
+  document.getElementById('btnActive').click();
+  setTimeout(()=>{
+    const found2 = Array.from(select.options).find(o=>o.textContent.toLowerCase().includes(q.toLowerCase()));
+    if(found2){ select.value = found2.value; drawFor(found2.value); }
+    else alert('No encontrado en activos.');
+  }, 2500);
+});
 
 // initial
 drawFor(document.getElementById('satSelect').value).catch(e=>{
