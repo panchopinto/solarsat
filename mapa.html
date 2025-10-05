@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🛰️ Ground‑Track — SOLARSAT</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/satellite.js@5.0.0/dist/satellite.min.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo"></div><div class="title">🛰️ Ground‑Track Satélites</div>
+    <span class="badge" id="status">Listo</span>
+    <div style="flex:1"></div>
+    <a class="btn" href="index.html">🏠 Inicio</a>
+  </header>
+
+  <main class="wrap">
+    <div class="row" style="gap:16px">
+      <div class="sidebar" style="min-width:260px;flex:1">
+        <div>
+          <label>Satélite</label>
+          <select id="satSelect">
+            <option value="25544">ISS (ZARYA)</option>
+            <option value="20580">HUBBLE</option>
+            <option value="28654">NOAA 18</option>
+            <option value="33591">NOAA 19</option>
+          </select>
+        </div>
+        <div class="row">
+          <div style="flex:1">
+            <label>Altitud min (km)</label>
+            <input id="altMin" type="number" value="350"/>
+          </div>
+          <div style="flex:1">
+            <label>Altitud max (km)</label>
+            <input id="altMax" type="number" value="600"/>
+          </div>
+        </div>
+        <div class="row">
+          <div style="flex:1">
+            <label>Inclinación min (°)</label>
+            <input id="incMin" type="number" value="0"/>
+          </div>
+          <div style="flex:1">
+            <label>Inclinación max (°)</label>
+            <input id="incMax" type="number" value="100"/>
+          </div>
+        </div>
+        <hr/>
+        <div class="row">
+          <label><input type="checkbox" id="drawTrack" checked/> Dibujar traza (90′)</label>
+        </div>
+        <div class="row">
+          <label><input type="checkbox" id="autoRefresh" checked/> Auto‑refresh (30 s)</label>
+        </div>
+        <div class="row">
+          <button class="btn" id="btnLoad">🔄 Cargar</button>
+          <button class="btn" id="btnExport">⬇️ Exportar GeoJSON</button>
+        </div>
+        <div class="notice">Tip: activa “Cargar Activos (lento)” para miles de TLEs (puede tardar).</div>
+        <div class="row">
+          <button class="btn" id="btnActive">🗂️ Cargar Activos (lento)</button>
+        </div>
+      </div>
+
+      <div class="map-wrap" id="map" style="flex:3"></div>
+    </div>
+  </main>
+
+  <script src="assets/js/satmap.js"></script>
+</body>
+</html>

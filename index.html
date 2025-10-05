@@ -1,76 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>🌍🛰️ SolarSat — Visualizador Satelital 3D</title>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://unpkg.com/satellite.js@5.0.1/dist/satellite.min.js"></script>
+  <title>🔭 SOLARSAT — Repositorio interactivo</title>
+  <meta name="description" content="Sistema Solar 3D + Mapa 2D con ground-track de satélites.">
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <link rel="icon" href="assets/img/favicon.svg">
 </head>
 <body>
-  <div class="header">
-    <div class="brand">
-      <div class="dot"></div> SolarSat <span class="small">v2 • 3D</span>
-    </div>
-    <div class="toolbar">
-      <a class="btn accent" href="planets.html">☀️ Sistema Solar</a>
-      <a class="btn" href="map.html">🗺️ Mapa 2D</a>
-      <button class="btn ok" id="btn-starlink">🛰️ Starlink</button>
-      <button class="btn" id="btn-noaa">🛰️ NOAA</button>
-      <button class="btn" id="btn-weather">⛅ Weather</button>
-      <button class="btn" id="btn-active">🟢 Active</button>
-      <input id="norad" placeholder="NORAD ID…" class="number"/>
-      <button class="btn" id="btn-norad">🔎 Buscar</button>
-      <button class="btn" id="btn-capture">📷 Captura</button>
-    </div>
-  </div>
+  <header class="header">
+    <div class="logo" aria-hidden="true"></div>
+    <div class="title">🔭 SOLARSAT</div>
+    <div class="chip">v1.2 • 2025-10-05</div>
+    <div style="flex:1"></div>
+    <a class="btn" href="solar.html">🪐 Sistema Solar 3D</a>
+    <a class="btn" href="mapa.html">🛰️ Ground‑Track Satélites</a>
+    <a class="btn" href="README.html">❓ Ayuda</a>
+  </header>
 
-  <div class="canvas-wrap"></div>
+  <main class="wrap">
+    <section class="grid">
+      <a class="card" href="solar.html">
+        <h3>🪐 Sistema Solar 3D</h3>
+        <p>Visualización minimal con órbitas y control de cámara.</p>
+        <div class="chips">
+          <div class="chip">Three.js</div>
+          <div class="chip">Controles orbitales</div>
+          <div class="chip">Modo presentación</div>
+        </div>
+      </a>
 
-  <aside class="panel">
-    <h2>🛰️ Panel Satelital (3D)</h2>
-    <div class="row"><span class="badge">Grupo: <strong id="last-group">—</strong></span><span class="badge">Satélites: <strong id="sat-count">0</strong></span></div>
-    <div class="row">
-      <span class="badge">Filtros</span>
-      <input id="altMin" class="number" type="number" value="0" min="0" step="10" title="Altitud mínima (km)" />
-      <input id="altMax" class="number" type="number" value="40000" min="0" step="10" title="Altitud máxima (km)" />
-      <input id="incMin" class="number" type="number" value="0" min="0" max="180" step="1" title="Inclinación mínima (°)" />
-      <input id="incMax" class="number" type="number" value="180" min="0" max="180" step="1" title="Inclinación máxima (°)" />
-      <button class="btn" id="applyFilters">🎛️ Aplicar</button>
-    </div>
-    <div class="row small">Cargar TLEs desde CelesTrak y propagación en tiempo real con <code>satellite.js</code>.</div>
-  </aside>
+      <a class="card" href="mapa.html">
+        <h3>🛰️ Mapa 2D Ground‑Track</h3>
+        <p>Posición en vivo + traza de 90 min. Filtros por altitud/inclinación.</p>
+        <div class="chips">
+          <div class="chip">Leaflet</div>
+          <div class="chip">satellite.js</div>
+          <div class="chip">CelesTrak</div>
+        </div>
+      </a>
 
-  <div class="footer">
-    <div>Hecho con 💚 por Pancho + ChatGPT • WebGL</div>
-    <div id="loading" class="badge hidden">⏳ Cargando…</div>
-  </div>
+      <a class="card" href="README.html">
+        <h3>❓ Ayuda & Sugerencias</h3>
+        <p>Cómo funciona, causas típicas de “no carga” y 5 mejoras.</p>
+        <div class="chips">
+          <div class="chip">Guía rápida</div>
+          <div class="chip">Solución de problemas</div>
+          <div class="chip">Roadmap</div>
+        </div>
+      </a>
+    </section>
 
-  <script type="module">
-    import './js/satview.js';
-    import { el, on } from './js/ui.js';
-    window.SATVIEW.init();
-
-    on(el('#btn-starlink'), 'click', ()=> SATVIEW.loadGroup('starlink'));
-    on(el('#btn-noaa'), 'click', ()=> SATVIEW.loadGroup('noaa'));
-    on(el('#btn-weather'), 'click', ()=> SATVIEW.loadGroup('weather'));
-    on(el('#btn-active'), 'click', ()=> SATVIEW.loadGroup('active'));
-    on(el('#btn-norad'), 'click', ()=> SATVIEW.loadNORAD(el('#norad').value.trim()));
-    on(el('#btn-capture'), 'click', ()=> SATVIEW.capture());
-
-    on(el('#applyFilters'), 'click', ()=> {
-      SATVIEW.setFilters({
-        altMin: el('#altMin').value,
-        altMax: el('#altMax').value,
-        incMin: el('#incMin').value,
-        incMax: el('#incMax').value,
-      });
-      el('#last-group').textContent = '—';
-      el('#sat-count').textContent = '0';
-      alert('Filtros aplicados. Vuelve a cargar un grupo o NORAD para refrescar.');
-    });
-  </script>
+    <footer>Hecho con 💜 para el proyecto educativo de Pancho. — SOLARSAT</footer>
+  </main>
 </body>
 </html>
