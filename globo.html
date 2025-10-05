@@ -1,14 +1,75 @@
-<!doctype html><html><head><meta charset='utf-8'><link rel='stylesheet' href='assets/css/styles.css'><title>🌍 Globo 3D</title></head><body>
-<header class="header">
-  <div class="logo"></div><div class="title">🌍 Globo 3D</div>
-  <div class="nav">
-    <a class="btn btn-3d" href="viewer3d.html?src=assets/models/iss-_international_space_station.glb&title=🛰️%20ISS">🪐 3D</a>
-    <a class="btn btn-ar" href="ar.html">📱 AR</a>
-    <a class="btn btn-vr" href="viewervr.html?src=assets/models/iss-_international_space_station.glb&title=🛰️%20ISS">🕶️ VR</a>
-    <a class="btn btn-globe" href="globo.html">🌍 Globo 3D</a>
-    <a class="btn btn-map" href="mapa.html">🛰️ Ground-Track</a>
-    <a class="btn btn-help" href="README.html">❓ Ayuda</a>
-    <div class="lang"><a class="btn" id="btnEN">EN</a> <a class="btn" id="btnES">ES</a></div>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🌍 Globo 3D — SOLARSAT</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.157.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo"></div><div class="title"><span data-i18n="globe_title">🌍 Globo 3D con terminador</span></div>
+    <div style="flex:1"></div>
+    <a class="btn" href="index.html"><span data-i18n="nav_home">🏠 Inicio</span></a>
+    <a class="btn" id="btnClassMode">🎓 Modo Clase</a>
+    <a class="btn" class="btn btn-map" href="mapa.html">🛰️ Mapa</a>
+    <a class="btn" class="btn btn-3d" href="solar.html"><span data-i18n="nav_3d">🪐 3D</span></a>
+    <div class="row">
+    <a class="btn" id="btnEN">EN</a>
+    <a class="btn" id="btnES">ES</a>
   </div>
 </header>
-<main class='wrap'><div class='notice'>Placeholder de Globo 3D (sitio original).</div></main></body></html>
+<script>
+(function(){
+  function applyClassMode(on){
+    document.documentElement.classList.toggle('class-mode', !!on);
+    if(on && !document.getElementById('classHUD')){
+      const hud = document.createElement('div');
+      hud.id='classHUD';
+      hud.innerHTML = '<span id="utcClock">--:--:-- UTC</span> · <span id="classInfo">Modo Clase</span>';
+      document.body.appendChild(hud);
+      setInterval(()=>{
+        const d = new Date();
+        document.getElementById('utcClock').textContent =
+          d.getUTCHours().toString().padStart(2,'0') + ':' +
+          d.getUTCMinutes().toString().padStart(2,'0') + ':' +
+          d.getUTCSeconds().toString().padStart(2,'0') + ' UTC';
+      }, 1000);
+    }else if(!on){
+      const hud = document.getElementById('classHUD');
+      if(hud) hud.remove();
+    }
+  }
+  window.SOLARSAT = window.SOLARSAT || {};
+  window.SOLARSAT.applyClassMode = applyClassMode;
+  // Restore from localStorage
+  applyClassMode(localStorage.getItem('classMode')==='1');
+  const btn = document.getElementById('btnClassMode');
+  if(btn){
+    btn.addEventListener('click', ()=>{
+      const on = !(localStorage.getItem('classMode')==='1');
+      localStorage.setItem('classMode', on?'1':'0');
+      applyClassMode(on);
+    });
+  }
+})();
+</script>
+  <main class="wrap">
+    <div class="solar-wrap" id="globe"></div>
+    <div class="notice">Texturas vía CDN; el terminador se actualiza con la hora actual.</div>
+  
+<footer>
+  <div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+    <div>👩‍🏫<br/>Belén Acuña — 📧 <a href="mailto:belen.acpe@gmail.com">belen.acpe@gmail.com</a> · 📞 <a href="tel:+56962664960">+56 9 6266 4960</a></div>
+    <div>👨‍💻<br/>Francisco Pinto — 📧 <a href="mailto:franciscoandresp@gmail.com">franciscoandresp@gmail.com</a> · 📞 <a href="tel:+56920027992">+56 9 2002 7992</a></div>
+    <div>Hecho con ❤️ para el Liceo Bicentenario de Excelencia Polivalente San Nicolás — Proyecto AR educativo.</div>
+  </div>
+</footer>
+
+</main>
+  <script src="assets/js/globe.js"></script>
+<script src="assets/js/i18n.js"></script>
+</body>
+</html>
