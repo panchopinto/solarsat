@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>🔭 SOLARSAT — Repositorio interactivo</title>
-  <meta name="description" content="Sistema Solar 3D + Mapa 2D con ground-track de satélites.">
+  <meta name="description" content="Sistema Solar 3D + AR + VR + Mapa 2D con ground-track de satélites.">
   <link rel="stylesheet" href="assets/css/styles.css"/>
   <link rel="icon" href="assets/img/favicon.svg">
 </head>
@@ -12,10 +12,12 @@
   <header class="header">
     <div class="logo" aria-hidden="true"></div>
     <div class="title">🔭 SOLARSAT</div>
-    <div class="chip">v1.2 • 2025-10-05</div>
+    <div class="chip">v3 • 2025-10-05</div>
     <div style="flex:1"></div>
-    <a class="btn" href="solar.html">🪐 Sistema Solar 3D</a>
-    <a class="btn" href="mapa.html">🛰️ Ground‑Track Satélites</a>
+    <a class="btn" href="solar.html">🪐 3D</a>
+    <a class="btn" href="ar.html">📱 AR</a>
+    <a class="btn" href="vr.html">🕶️ VR</a>
+    <a class="btn" href="mapa.html">🛰️ Ground-Track</a>
     <a class="btn" href="README.html">❓ Ayuda</a>
   </header>
 
@@ -23,35 +25,29 @@
     <section class="grid">
       <a class="card" href="solar.html">
         <h3>🪐 Sistema Solar 3D</h3>
-        <p>Visualización minimal con órbitas y control de cámara.</p>
-        <div class="chips">
-          <div class="chip">Three.js</div>
-          <div class="chip">Controles orbitales</div>
-          <div class="chip">Modo presentación</div>
-        </div>
+        <p>Visualización con órbitas y panel rápido AR/VR.</p>
+        <div class="chips"><div class="chip">Three.js</div><div class="chip">AR/VR toggle</div></div>
       </a>
-
+      <a class="card" href="ar.html">
+        <h3>📱 Realidad Aumentada</h3>
+        <p>ISS y Júpiter .glb (model-viewer/WebXR).</p>
+        <div class="chips"><div class="chip">.glb</div><div class="chip">WebXR</div></div>
+      </a>
+      <a class="card" href="vr.html">
+        <h3>🕶️ Realidad Virtual</h3>
+        <p>Escena simple con ISS (A-Frame).</p>
+        <div class="chips"><div class="chip">A-Frame</div></div>
+      </a>
       <a class="card" href="mapa.html">
-        <h3>🛰️ Mapa 2D Ground‑Track</h3>
-        <p>Posición en vivo + traza de 90 min. Filtros por altitud/inclinación.</p>
-        <div class="chips">
-          <div class="chip">Leaflet</div>
-          <div class="chip">satellite.js</div>
-          <div class="chip">CelesTrak</div>
-        </div>
+        <h3>🛰️ Ground-Track</h3>
+        <p>Búsqueda incremental, filtro LEO/MEO/GEO, HUD con “Seguir”.</p>
+        <div class="chips"><div class="chip">Leaflet</div><div class="chip">satellite.js</div></div>
       </a>
-
       <a class="card" href="README.html">
-        <h3>❓ Ayuda & Sugerencias</h3>
-        <p>Cómo funciona, causas típicas de “no carga” y 5 mejoras.</p>
-        <div class="chips">
-          <div class="chip">Guía rápida</div>
-          <div class="chip">Solución de problemas</div>
-          <div class="chip">Roadmap</div>
-        </div>
+        <h3>❓ Ayuda</h3>
+        <p>Guía y troubleshooting.</p>
       </a>
     </section>
-
     <footer>Hecho con 💜 para el proyecto educativo de Pancho. — SOLARSAT</footer>
   </main>
 </body>

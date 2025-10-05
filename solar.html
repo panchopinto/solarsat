@@ -15,11 +15,16 @@
     <a class="btn" href="index.html">🏠 Inicio</a>
     <a class="btn" href="ar.html">📱 AR</a>
     <a class="btn" href="vr.html">🕶️ VR</a>
-    <a class="btn" id="present">🎬 Presentación</a>
   </header>
   <main class="wrap">
-    <div class="solar-wrap" id="viewport"></div>
-    <div class="notice">Minimal educativo — escalas no reales para mostrar órbitas claramente.</div>
+    <div class="solar-wrap" id="viewport" style="position:relative"></div>
+    <div id="quickPanel" style="position:relative; margin-top:-70px; display:flex; justify-content:flex-end;">
+      <div class="row" style="gap:8px">
+        <a class="btn" href="ar.html">📱 Ver en AR</a>
+        <a class="btn" href="vr.html">🕶️ Entrar a VR</a>
+        <a class="btn" id="present">🎬 Presentación</a>
+      </div>
+    </div>
   </main>
   <script src="assets/js/solar3d.js"></script>
 </body>

@@ -26,16 +26,13 @@ a{color:inherit;text-decoration:none}
   backdrop-filter: blur(8px);
   padding:16px 24px; display:flex; align-items:center; gap:12px;
 }
-.logo{
-  width:40px;height:40px;border-radius:50%;
+.logo{ width:40px;height:40px;border-radius:50%;
   background:conic-gradient(from 40deg at 50% 50%, #22d3ee, #7c3aed, #22c55e, #22d3ee);
   box-shadow:0 0 20px rgba(124,58,237,.45);
 }
 .title{font-weight:700;letter-spacing:.4px}
 .wrap{max-width:1100px;margin:0 auto;padding:24px}
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
   border:1px solid rgba(255,255,255,.08);
@@ -56,21 +53,14 @@ a{color:inherit;text-decoration:none}
 }
 .btn:active{ transform: translateY(1px); box-shadow: 0 6px 16px rgba(0,0,0,.4) }
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-footer{
-  margin-top:32px; padding:20px; text-align:center;
-  color:var(--muted); font-size:13px
-}
-
+footer{ margin-top:32px; padding:20px; text-align:center; color:var(--muted); font-size:13px }
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .chip{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05)}
-
 .map-wrap, .solar-wrap{height:72vh;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
-.sidebar{
-  display:grid; gap:12px; padding:12px; background:rgba(0,0,0,.25);
-  border:1px solid rgba(255,255,255,.08); border-radius:16px;
-}
+.sidebar{ display:grid; gap:12px; padding:12px; background:rgba(0,0,0,.25);
+  border:1px solid rgba(255,255,255,.08); border-radius:16px; min-width:260px}
 label{font-size:13px;color:var(--muted)}
-input[type="number"], select{
+input[type="number"], input[type="text"], select{
   width:100%; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.12);
   background:rgba(255,255,255,.06); color:var(--text)
 }

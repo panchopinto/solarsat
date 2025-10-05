@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>🛰️ Ground‑Track — SOLARSAT</title>
+  <title>🛰️ Ground-Track — SOLARSAT</title>
   <link rel="stylesheet" href="assets/css/styles.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -11,7 +11,7 @@
 </head>
 <body>
   <header class="header">
-    <div class="logo"></div><div class="title">🛰️ Ground‑Track Satélites</div>
+    <div class="logo"></div><div class="title">🛰️ Ground-Track Satélites</div>
     <span class="badge" id="status">Listo</span>
     <div style="flex:1"></div>
     <a class="btn" href="index.html">🏠 Inicio</a>
@@ -21,7 +21,7 @@
 
   <main class="wrap">
     <div class="row" style="gap:16px">
-      <div class="sidebar" style="min-width:260px;flex:1">
+      <div class="sidebar">
         <div>
           <label>Satélite</label>
           <select id="satSelect">
@@ -51,12 +51,30 @@
             <input id="incMax" type="number" value="100"/>
           </div>
         </div>
+        <div>
+          <label>Regímen orbital</label>
+          <select id="regimeFilter">
+            <option value="ALL">Todos</option>
+            <option value="LEO">LEO</option>
+            <option value="MEO">MEO</option>
+            <option value="GEO">GEO</option>
+          </select>
+        </div>
+        <div>
+          <label>Búsqueda</label>
+          <input id="qSearch" type="text" placeholder="Nombre o NORAD (ej: 25544)" />
+          <div class="row">
+            <button class="btn" id="btnSearch">🔎 Buscar</button>
+            <label class="chip"><input type="checkbox" id="followSat" checked/> Seguir</label>
+          </div>
+          <div class="notice">Color: <span class="chip" style="border-color:#60a5fa;background:rgba(96,165,250,.15)">LEO</span> <span class="chip" style="border-color:#f59e0b;background:rgba(245,158,11,.15)">MEO</span> <span class="chip" style="border-color:#10b981;background:rgba(16,185,129,.15)">GEO</span></div>
+        </div>
         <hr/>
         <div class="row">
           <label><input type="checkbox" id="drawTrack" checked/> Dibujar traza (90′)</label>
         </div>
         <div class="row">
-          <label><input type="checkbox" id="autoRefresh" checked/> Auto‑refresh (30 s)</label>
+          <label><input type="checkbox" id="autoRefresh" checked/> Auto-refresh (30 s)</label>
         </div>
         <div class="row">
           <button class="btn" id="btnLoad">🔄 Cargar</button>
@@ -68,7 +86,20 @@
         </div>
       </div>
 
-      <div class="map-wrap" id="map" style="flex:3"></div>
+      <div class="map-wrap" id="map" style="flex:3; position:relative">
+        <div id="hud" style="position:absolute; right:12px; top:12px; background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px; font-size:12px; z-index:400">
+          <div class="row" style="justify-content:space-between;margin-bottom:6px">
+            <button class="btn" id="btnCenterHUD">🎯 Centrar</button>
+            <button class="btn" id="btnPinHUD">📌 Fijar</button>
+          </div>
+          <div><b>HUD</b> — <span id="hudName">—</span></div>
+          <div>Lat: <span id="hudLat">—</span></div>
+          <div>Lon: <span id="hudLon">—</span></div>
+          <div>Alt: <span id="hudAlt">—</span> km</div>
+          <div>Inc: <span id="hudInc">—</span> °</div>
+          <div>Tipo: <span id="hudType">—</span></div>
+        </div>
+      </div>
     </div>
   </main>
 
