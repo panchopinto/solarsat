@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🌍🛰️ SolarSat — Visualizador Satelital</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/satellite.js@5.0.1/dist/satellite.min.js"></script>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <div class="dot"></div> SolarSat <span class="small">v1.0</span>
+    </div>
+    <div class="toolbar">
+      <a class="btn accent" href="planets.html">☀️ Sistema Solar</a>
+      <button class="btn ok" id="btn-starlink">🛰️ Starlink</button>
+      <button class="btn" id="btn-noaa">🛰️ NOAA</button>
+      <button class="btn" id="btn-weather">⛅ Weather</button>
+      <button class="btn" id="btn-active">🟢 Active</button>
+      <input id="norad" placeholder="NORAD ID…"/>
+      <button class="btn" id="btn-norad">🔎 Buscar</button>
+      <button class="btn" id="btn-capture">📷 Captura</button>
+      <button class="btn" id="btn-theme">🎨 Tema</button>
+    </div>
+  </div>
+
+  <div class="canvas-wrap"></div>
+
+  <aside class="panel">
+    <h2>🛰️ Panel Satelital</h2>
+    <div class="row"><span class="badge">Grupo: <strong id="last-group">—</strong></span><span class="badge">Satélites: <strong id="sat-count">0</strong></span></div>
+    <div class="row small">Cargar TLEs desde CelesTrak y propagación en tiempo real con <code>satellite.js</code>.</div>
+    <div class="list" id="log"></div>
+  </aside>
+
+  <div class="footer">
+    <div>Hecho con 💚 por Francisco Pinto - franciscoandresp@gmail.com y Belen Acuña - belen.acpe@gmail.com</div>
+    <div id="loading" class="badge hidden">⏳ Cargando…</div>
+  </div>
+
+  <script type="module">
+    import './js/satview.js';
+    import { el, on } from './js/ui.js';
+    window.SATVIEW.init();
+
+    on(el('#btn-starlink'), 'click', ()=> SATVIEW.loadGroup('starlink'));
+    on(el('#btn-noaa'), 'click', ()=> SATVIEW.loadGroup('noaa'));
+    on(el('#btn-weather'), 'click', ()=> SATVIEW.loadGroup('weather'));
+    on(el('#btn-active'), 'click', ()=> SATVIEW.loadGroup('active'));
+    on(el('#btn-norad'), 'click', ()=> SATVIEW.loadNORAD(el('#norad').value.trim()));
+    on(el('#btn-capture'), 'click', ()=> SATVIEW.capture());
+    let dark = true;
+    on(el('#btn-theme'), 'click', ()=>{ dark = !dark; document.body.dataset.theme = dark ? 'dark':'light'; });
+  </script>
+</body>
+</html>
