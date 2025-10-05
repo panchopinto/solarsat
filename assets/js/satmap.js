@@ -357,3 +357,27 @@ document.getElementById('btnPredict')?.addEventListener('click', ()=>{
   const norad = document.getElementById('satSelect').value;
   predictPasses(norad);
 });
+
+// class mode autoplay
+(function(){
+  let cycleTimer=null;
+  function startCycle(){
+    if(cycleTimer) clearInterval(cycleTimer);
+    if(localStorage.getItem('classMode')==='1'){
+      cycleTimer = setInterval(()=>{
+        const sel = document.getElementById('satSelect');
+        if(!sel || sel.options.length===0) return;
+        let idx = sel.selectedIndex;
+        idx = (idx+1) % sel.options.length;
+        sel.selectedIndex = idx;
+        document.getElementById('followSat').checked = true;
+        drawFor(sel.value);
+        const hud = document.getElementById('classInfo');
+        if(hud){ hud.textContent = 'Mostrando: ' + sel.options[idx].textContent; }
+      }, 20000);
+    }
+  }
+  window.addEventListener('storage', startCycle);
+  startCycle();
+  setInterval(startCycle, 5000);
+})();

@@ -67,3 +67,13 @@ input[type="number"], input[type="text"], select{
 hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:8px 0}
 .notice{font-size:12px;color:var(--muted)}
 .badge{padding:4px 8px;border-radius:10px;background:rgba(34,211,238,.15);border:1px solid rgba(34,211,238,.35);font-size:12px}
+
+/* Modo Clase */
+.class-mode .sidebar, .class-mode .notice, .class-mode .chips { display:none !important; }
+.class-mode .header { background: rgba(0,0,0,.75); }
+#classHUD {
+  position: fixed; left: 50%; top: 12px; transform: translateX(-50%);
+  background: rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.2);
+  border-radius: 14px; padding: 8px 12px; font-size: 22px; z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+}

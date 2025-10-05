@@ -10,6 +10,7 @@
   renderer.setSize(el.clientWidth, el.clientHeight);
   el.appendChild(renderer.domElement);
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.autoRotate = (localStorage.getItem('classMode')==='1'); controls.autoRotateSpeed = 0.6;
 
   // Lights
   const light = new THREE.PointLight(0xffffff, 2, 0);
@@ -71,3 +72,8 @@
     controls.target.set(0,0,0); controls.update();
   });
 })();
+
+// auto-rotate class mode toggle watcher
+setInterval(()=>{
+  controls.autoRotate = (localStorage.getItem('classMode')==='1');
+}, 2000);

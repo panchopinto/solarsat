@@ -16,9 +16,45 @@
     <span class="badge" id="status">Listo</span>
     <div style="flex:1"></div>
     <a class="btn" href="index.html">🏠 Inicio</a>
+    <a class="btn" id="btnClassMode">🎓 Modo Clase</a>
     <a class="btn" href="ar.html">📱 AR</a>
     <a class="btn" href="vr.html">🕶️ VR</a>
   </header>
+<script>
+(function(){
+  function applyClassMode(on){
+    document.documentElement.classList.toggle('class-mode', !!on);
+    if(on && !document.getElementById('classHUD')){
+      const hud = document.createElement('div');
+      hud.id='classHUD';
+      hud.innerHTML = '<span id="utcClock">--:--:-- UTC</span> · <span id="classInfo">Modo Clase</span>';
+      document.body.appendChild(hud);
+      setInterval(()=>{
+        const d = new Date();
+        document.getElementById('utcClock').textContent =
+          d.getUTCHours().toString().padStart(2,'0') + ':' +
+          d.getUTCMinutes().toString().padStart(2,'0') + ':' +
+          d.getUTCSeconds().toString().padStart(2,'0') + ' UTC';
+      }, 1000);
+    }else if(!on){
+      const hud = document.getElementById('classHUD');
+      if(hud) hud.remove();
+    }
+  }
+  window.SOLARSAT = window.SOLARSAT || {};
+  window.SOLARSAT.applyClassMode = applyClassMode;
+  // Restore from localStorage
+  applyClassMode(localStorage.getItem('classMode')==='1');
+  const btn = document.getElementById('btnClassMode');
+  if(btn){
+    btn.addEventListener('click', ()=>{
+      const on = !(localStorage.getItem('classMode')==='1');
+      localStorage.setItem('classMode', on?'1':'0');
+      applyClassMode(on);
+    });
+  }
+})();
+</script>
 
   <main class="wrap">
     <div class="row" style="gap:16px">
