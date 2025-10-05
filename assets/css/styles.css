@@ -111,3 +111,12 @@ hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:8px 0}
   box-shadow: 0 8px 24px rgba(236,72,153,.25);
 }
 .nav .btn{ margin-left:8px }
+
+/* Nav button themed colors */
+.btn-3d    { background: linear-gradient(180deg, rgba(245,158,11,.28), rgba(245,158,11,.12)); border-color: rgba(245,158,11,.45); }
+.btn-ar    { background: linear-gradient(180deg, rgba(99,102,241,.28), rgba(59,130,246,.12)); border-color: rgba(99,102,241,.45); }
+.btn-vr    { background: linear-gradient(180deg, rgba(139,92,246,.28), rgba(236,72,153,.12)); border-color: rgba(139,92,246,.45); }
+.btn-globe { background: linear-gradient(180deg, rgba(34,197,94,.28), rgba(34,211,238,.12)); border-color: rgba(34,197,94,.45); }
+.btn-map   { background: linear-gradient(180deg, rgba(59,130,246,.28), rgba(59,130,246,.12)); border-color: rgba(59,130,246,.45); }
+.btn-help  { background: linear-gradient(180deg, rgba(239,68,68,.28), rgba(244,63,94,.12)); border-color: rgba(239,68,68,.45); }
+.header .btn { margin-left: 8px }

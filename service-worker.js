@@ -31,3 +31,18 @@ self.addEventListener('fetch', e=>{
   // Cache-first for same-origin and CORE
   e.respondWith(caches.match(e.request).then(r=> r || fetch(e.request)));
 });
+
+
+// Cache GLB/GLTF models at runtime (cache-first)
+self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+  if(url.pathname.endsWith('.glb') || url.pathname.endsWith('.gltf')){
+    event.respondWith(caches.open(CACHE).then(async cache=>{
+      const cached = await cache.match(event.request);
+      if(cached) return cached;
+      const res = await fetch(event.request);
+      cache.put(event.request, res.clone());
+      return res;
+    }));
+  }
+});

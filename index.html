@@ -15,13 +15,17 @@
     <div class="title">🔭 SOLARSAT</div>
     <div class="chip">v3 • 2025-10-05</div>
     <div style="flex:1"></div>
-    <a class="btn" href="solar.html">🪐 3D</a>
-    <a class="btn" href="ar.html">📱 AR</a>
-    <a class="btn" href="vr.html">🕶️ VR</a>
-    <a class="btn" href="globo.html">🌍 Globo 3D</a>
-    <a class="btn" href="mapa.html">🛰️ Ground-Track</a>
-    <a class="btn" href="README.html">❓ Ayuda</a>
-  </header>
+    <a class="btn" class="btn btn-3d" href="solar.html"><span data-i18n="nav_3d">🪐 3D</span></a>
+    <a class="btn" class="btn btn-ar" href="ar.html"><span data-i18n="nav_ar">📱 AR</span></a>
+    <a class="btn" class="btn btn-vr" href="vr.html"><span data-i18n="nav_vr">🕶️ VR</span></a>
+    <a class="btn" class="btn btn-globe" href="globo.html"><span data-i18n="nav_globe">🌍 Globo 3D</span></a>
+    <a class="btn" class="btn btn-map" href="mapa.html"><span data-i18n="index_title_map"><span data-i18n="nav_map">🛰️ Ground-Track</span></span></a>
+    <a class="btn" class="btn btn-help" href="README.html"><span data-i18n="index_title_help"><span data-i18n="nav_help">❓ Ayuda</span></span></a>
+    <div class="row">
+    <a class="btn" id="btnEN">EN</a>
+    <a class="btn" id="btnES">ES</a>
+  </div>
+</header>
 <script>
 (function(){
   function applyClassMode(on){
@@ -60,29 +64,29 @@
 
   <main class="wrap">
     <section class="grid">
-      <a class="card" data-variant="1" href="solar.html">
-        <h3>🪐 Sistema Solar 3D</h3>
-        <p>Visualización con órbitas y panel rápido AR/VR.</p>
+      <a class="card" data-variant="1" class="btn btn-3d" href="solar.html">
+        <h3><span data-i18n="index_title_3d">🪐 Sistema Solar 3D</span></h3>
+        <p><span data-i18n="index_desc_3d">Visualización con órbitas y panel rápido AR/VR.</span></p>
         <div class="chips"><div class="chip">Three.js</div><div class="chip">AR/VR toggle</div></div>
       </a>
-      <a class="card" data-variant="2" href="ar.html">
-        <h3>📱 Realidad Aumentada</h3>
-        <p>ISS y Júpiter .glb (model-viewer/WebXR).</p>
+      <a class="card" data-variant="2" class="btn btn-ar" href="ar.html">
+        <h3><span data-i18n="index_title_ar">📱 Realidad Aumentada</span></h3>
+        <p><span data-i18n="index_desc_ar">ISS y Júpiter .glb (model-viewer/WebXR).</span></p>
         <div class="chips"><div class="chip">.glb</div><div class="chip">WebXR</div></div>
       </a>
-      <a class="card" data-variant="4" href="vr.html">
-        <h3>🕶️ Realidad Virtual</h3>
-        <p>Escena simple con ISS (A-Frame).</p>
+      <a class="card" data-variant="4" class="btn btn-vr" href="vr.html">
+        <h3><span data-i18n="index_title_vr">🕶️ Realidad Virtual</span></h3>
+        <p><span data-i18n="index_desc_vr">Escena simple con ISS (A-Frame).</span></p>
         <div class="chips"><div class="chip">A-Frame</div></div>
       </a>
-      <a class="card" data-variant="3" href="mapa.html">
-        <h3>🛰️ Ground-Track</h3>
-        <p>Búsqueda incremental, filtro LEO/MEO/GEO, HUD con “Seguir”.</p>
+      <a class="card" data-variant="3" class="btn btn-map" href="mapa.html">
+        <h3><span data-i18n="index_title_map"><span data-i18n="nav_map">🛰️ Ground-Track</span></span></h3>
+        <p><span data-i18n="index_desc_map">Búsqueda incremental, filtro LEO/MEO/GEO, HUD con “Seguir”.</span></p>
         <div class="chips"><div class="chip">Leaflet</div><div class="chip">satellite.js</div></div>
       </a>
-      <a class="card" href="README.html">
-        <h3>❓ Ayuda</h3>
-        <p>Guía y troubleshooting.</p>
+      <a class="card" class="btn btn-help" href="README.html">
+        <h3><span data-i18n="index_title_help"><span data-i18n="nav_help">❓ Ayuda</span></span></h3>
+        <p><span data-i18n="index_desc_help">Guía y troubleshooting.</span></p>
       </a>
     </section>
     
@@ -103,5 +107,6 @@
 
 </main>
   <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js");}</script>
+<script src="assets/js/i18n.js"></script>
 </body>
 </html>

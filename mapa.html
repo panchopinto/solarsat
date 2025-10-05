@@ -12,14 +12,18 @@
 </head>
 <body>
   <header class="header">
-    <div class="logo"></div><div class="title">🛰️ Ground-Track Satélites</div>
+    <div class="logo"></div><div class="title"><span data-i18n="map_title">🛰️ Ground-Track <span data-i18n="lbl_sat">Satélite</span>s</span></div>
     <span class="badge" id="status">Listo</span>
     <div style="flex:1"></div>
-    <a class="btn" href="index.html">🏠 Inicio</a>
+    <a class="btn" href="index.html"><span data-i18n="nav_home">🏠 Inicio</span></a>
     <a class="btn" id="btnClassMode">🎓 Modo Clase</a>
-    <a class="btn" href="ar.html">📱 AR</a>
-    <a class="btn" href="vr.html">🕶️ VR</a>
-  </header>
+    <a class="btn" class="btn btn-ar" href="ar.html"><span data-i18n="nav_ar">📱 AR</span></a>
+    <a class="btn" class="btn btn-vr" href="vr.html"><span data-i18n="nav_vr">🕶️ VR</span></a>
+    <div class="row">
+    <a class="btn" id="btnEN">EN</a>
+    <a class="btn" id="btnES">ES</a>
+  </div>
+</header>
 <script>
 (function(){
   function applyClassMode(on){
@@ -60,7 +64,7 @@
     <div class="row" style="gap:16px">
       <div class="sidebar">
         <div>
-          <label>Satélite</label>
+          <label><span data-i18n="lbl_sat">Satélite</span></label>
           <select id="satSelect">
             <option value="25544">ISS (ZARYA)</option>
             <option value="20580">HUBBLE</option>
@@ -70,101 +74,101 @@
         </div>
         <div class="row">
           <div style="flex:1">
-            <label>Altitud min (km)</label>
+            <label><span data-i18n="lbl_altmin">Altitud min (km)</span></label>
             <input id="altMin" type="number" value="350"/>
           </div>
           <div style="flex:1">
-            <label>Altitud max (km)</label>
+            <label><span data-i18n="lbl_altmax">Altitud max (km)</span></label>
             <input id="altMax" type="number" value="600"/>
           </div>
         </div>
         <div class="row">
           <div style="flex:1">
-            <label>Inclinación min (°)</label>
+            <label><span data-i18n="lbl_incmin">Inclinación min (°)</span></label>
             <input id="incMin" type="number" value="0"/>
           </div>
           <div style="flex:1">
-            <label>Inclinación max (°)</label>
+            <label><span data-i18n="lbl_incmax">Inclinación max (°)</span></label>
             <input id="incMax" type="number" value="100"/>
           </div>
         </div>
         <div>
-          <label>Regímen orbital</label>
+          <label><span data-i18n="lbl_regime">Regímen orbital</span></label>
           <select id="regimeFilter">
-            <option value="ALL">Todos</option>
+            <option value="ALL"><span data-i18n="opt_all">Todos</span></option>
             <option value="LEO">LEO</option>
             <option value="MEO">MEO</option>
             <option value="GEO">GEO</option>
           </select>
         </div>
         <div>
-          <label>Búsqueda</label>
+          <label><span data-i18n="lbl_search">Búsqueda</span></label>
           <input id="qSearch" type="text" placeholder="Nombre o NORAD (ej: 25544)" />
           <div class="row">
             <button class="btn" id="btnSearch">🔎 Buscar</button>
             <label class="chip"><input type="checkbox" id="followSat" checked/> Seguir</label>
           </div>
-          <div class="notice">Color: <span class="chip" style="border-color:#60a5fa;background:rgba(96,165,250,.15)">LEO</span> <span class="chip" style="border-color:#f59e0b;background:rgba(245,158,11,.15)">MEO</span> <span class="chip" style="border-color:#10b981;background:rgba(16,185,129,.15)">GEO</span></div>
+          <div class="notice"><span data-i18n="lbl_colorlegend">Color:</span> <span class="chip" style="border-color:#60a5fa;background:rgba(96,165,250,.15)">LEO</span> <span class="chip" style="border-color:#f59e0b;background:rgba(245,158,11,.15)">MEO</span> <span class="chip" style="border-color:#10b981;background:rgba(16,185,129,.15)">GEO</span></div>
         </div>
         
         <hr/>
         <div>
-          <label>Tiempo (±12 h)</label>
+          <label><span data-i18n="time_label">Tiempo (±12 h)</span></label>
           <input id="timeSlider" type="range" min="-43200" max="43200" value="0" step="30"/>
-          <div class="row"><span class="chip">Δt: <span id="dtLabel">0 s</span></span><button class="btn" id="btnNow">⏱️ Ahora</button></div>
+          <div class="row"><span class="chip">Δt: <span id="dtLabel">0 s</span></span><button class="btn" id="btnNow"><span data-i18n="btn_now">⏱️ Ahora</span></button></div>
         </div>
         <hr/>
         <div>
-          <label>Predicción de pases (24 h)</label>
+          <label><span data-i18n="passes_label">Predicción de pases (24 h)</span></label>
           <div class="row">
             <input id="obsLat" type="number" step="0.0001" placeholder="Lat" />
             <input id="obsLon" type="number" step="0.0001" placeholder="Lon" />
             <input id="minEl" type="number" step="1" placeholder="Elev mín (°)" value="10"/>
             <button class="btn" id="btnPredict">📅 Calcular</button>
           </div>
-          <div class="notice">Si dejas lat/lon vacíos, usamos tu ubicación del navegador (si la autorizas).</div>
+          <div class="notice"><span data-i18n="notice_geo">Si dejas lat/lon vacíos, usamos tu ubicación del navegador (si la autorizas).</span></div>
           <div id="passes" class="card" style="margin-top:8px; max-height:200px; overflow:auto; font-size:12px;"></div>
         </div>
     
         <div class="row">
-          <label><input type="checkbox" id="drawTrack" checked/> Dibujar traza (90′)</label>
+          <label><input type="checkbox" id="drawTrack" checked/> <span data-i18n="chk_track">Dibujar traza (90′)</span></label>
         </div>
         <div class="row">
-          <label><input type="checkbox" id="autoRefresh" checked/> Auto-refresh (30 s)</label>
+          <label><input type="checkbox" id="autoRefresh" checked/> <span data-i18n="chk_autorefresh">Auto-refresh (30 s)</span></label>
         </div>
         <div class="row">
-          <button class="btn" id="btnLoad">🔄 Cargar</button>
-          <button class="btn" id="btnExport">⬇️ Exportar GeoJSON</button>
+          <button class="btn" id="btnLoad"><span data-i18n="btn_load">🔄 Cargar</span></button>
+          <button class="btn" id="btnExport"><span data-i18n="btn_export">⬇️ Exportar GeoJSON</span></button>
         </div>
-        <div class="notice">Tip: activa “Cargar Activos (lento)” para miles de TLEs (puede tardar).</div>
+        <div class="notice"><span data-i18n="tip_active">Tip: activa “Cargar Activos (lento)” para miles de TLEs (puede tardar).</span></div>
         <hr/>
         <div>
-          <label>Cobertura</label>
+          <label><span data-i18n="cov_title">Cobertura</span></label>
           <div class="row">
-            <button class="btn btn-success" id="btnFootprint">🌐 Footprint</button>
-            <label class="chip">FOV (°) <input id="fovDeg" type="number" value="20" min="5" max="60" step="1" style="width:80px"/></label>
-            <button class="btn btn-primary" id="btnFOV">🎯 Dibujar FOV</button>
+            <button class="btn btn-success" id="btnFootprint"><span data-i18n="btn_footprint">🌐 Footprint</span></button>
+            <label class="chip"><span data-i18n="fov_label">FOV (°)</span> <input id="fovDeg" type="number" value="20" min="5" max="60" step="1" style="width:80px"/></label>
+            <button class="btn btn-primary" id="btnFOV"><span data-i18n="btn_fov">🎯 Dibujar FOV</span></button>
           </div>
         </div>
         <hr/>
         <div>
-          <label>Exportar & Enlace</label>
+          <label><span data-i18n="export_link">Exportar & Enlace</span></label>
           <div class="row">
-            <button class="btn btn-primary" id="btnKML">📤 KML</button>
-            <button class="btn btn-pink" id="btnGPX">📤 GPX</button>
-            <button class="btn btn-warn" id="btnLink">🔗 Copiar enlace</button>
+            <button class="btn btn-primary" id="btnKML"><span data-i18n="btn_kml">📤 KML</span></button>
+            <button class="btn btn-pink" id="btnGPX"><span data-i18n="btn_gpx">📤 GPX</span></button>
+            <button class="btn btn-warn" id="btnLink"><span data-i18n="btn_link">🔗 Copiar enlace</span></button>
           </div>
         </div>
         <hr/>
         <div>
-          <label>🎓 Modo Clase Pro (escenas)</label>
+          <label><span data-i18n="class_pro">🎓 Modo Clase Pro (escenas)</span></label>
           <select id="presetScene">
-            <option value="">Selecciona una escena…</option>
-            <option value="iss-chile">ISS sobre Chile</option>
-            <option value="ring-geo">Anillo GEO</option>
-            <option value="passes-hoy">Pases de hoy</option>
+            <option value=""><span data-i18n="preset_select">Selecciona una escena…</span></option>
+            <option value="iss-chile"><span data-i18n="preset_iss">ISS sobre Chile</span></option>
+            <option value="ring-geo"><span data-i18n="preset_geo">Anillo GEO</span></option>
+            <option value="passes-hoy"><span data-i18n="preset_passes">Pases de hoy</span></option>
           </select>
-          <button class="btn btn-success" id="btnApplyPreset">▶️ Aplicar</button>
+          <button class="btn btn-success" id="btnApplyPreset"><span data-i18n="btn_apply">▶️ Aplicar</span></button>
         </div>
     
         <div class="row">
@@ -206,5 +210,6 @@
 
   <script src="assets/js/satmap.js"></script>
   <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js");}</script>
+<script src="assets/js/i18n.js"></script>
 </body>
 </html>

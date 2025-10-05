@@ -10,18 +10,22 @@
 </head>
 <body>
 <header class="header">
-  <div class="logo"></div><div class="title">📱 Realidad Aumentada</div>
+  <div class="logo"></div><div class="title"><span data-i18n="ar_title">📱 Realidad Aumentada</span></div>
   <div style="flex:1"></div>
-  <a class="btn" href="index.html">🏠 Inicio</a>
-  <a class="btn" href="solar.html">🪐 3D</a>
-  <a class="btn" href="vr.html">🕶️ VR</a>
+  <a class="btn" href="index.html"><span data-i18n="nav_home">🏠 Inicio</span></a>
+  <a class="btn" class="btn btn-3d" href="solar.html"><span data-i18n="nav_3d">🪐 3D</span></a>
+  <a class="btn" class="btn btn-vr" href="vr.html"><span data-i18n="nav_vr">🕶️ VR</span></a>
+  <div class="row">
+    <a class="btn" id="btnEN">EN</a>
+    <a class="btn" id="btnES">ES</a>
+  </div>
 </header>
 <main class="wrap">
   <div class="grid">
     <div class="card">
       <h3>🛰️ ISS (NASA .glb)</h3>
       <p>Toca “Ver en tu espacio”.</p>
-      <model-viewer src="https://science.nasa.gov/wp-content/uploads/2025/04/international-space-station-iss-b.glb"
+      <model-viewer data-srcs="https://science.nasa.gov/wp-content/uploads/2025/04/international-space-station-iss-b.glb|https://science.nasa.gov/wp-content/uploads/2023/09/international-space-station-iss-b.glb"
                     ar ar-modes="webxr scene-viewer quick-look"
                     camera-controls shadow-intensity="1" exposure="0.9"
                     style="width:100%;height:60vh;border-radius:16px;overflow:hidden;background:#000">
@@ -31,7 +35,7 @@
     <div class="card">
       <h3>🪐 Júpiter (NASA .glb)</h3>
       <p>Modelo ligero para AR/visor.</p>
-      <model-viewer src="https://science.nasa.gov/wp-content/uploads/2023/09/jupiter.glb"
+      <model-viewer data-srcs="https://science.nasa.gov/wp-content/uploads/2023/09/jupiter.glb"
                     ar ar-modes="webxr scene-viewer quick-look"
                     camera-controls shadow-intensity="1" exposure="0.9"
                     style="width:100%;height:60vh;border-radius:16px;overflow:hidden;background:#000">
@@ -56,5 +60,28 @@
 
 </main>
   <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js");}</script>
+<script src="assets/js/i18n.js"></script>
+
+<script>
+(function(){
+  function attachFallbacks(mv){
+    const srcsAttr = mv.getAttribute('data-srcs');
+    if(!srcsAttr) return;
+    const urls = srcsAttr.split('|').map(s=>s.trim()).filter(Boolean);
+    if(!urls.length) return;
+    let idx = 0;
+    function tryNext(){
+      if(idx >= urls.length){ mv.insertAdjacentHTML('afterend','<div class="notice">❌ No se pudo cargar el modelo.</div>'); return; }
+      mv.src = urls[idx++];
+    }
+    mv.addEventListener('error', tryNext);
+    if(!mv.src) tryNext();
+  }
+  window.addEventListener('DOMContentLoaded', ()=>{
+    document.querySelectorAll('model-viewer[data-srcs]').forEach(attachFallbacks);
+  });
+})();
+</script>
+
 </body>
 </html>
