@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🪐 Sistema Solar 3D — SOLARSAT</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.157.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo"></div><div class="title">🪐 Sistema Solar 3D</div>
+    <div style="flex:1"></div>
+    <a class="btn" href="index.html">🏠 Inicio</a>
+    <a class="btn" href="ar.html">📱 AR</a>
+    <a class="btn" href="vr.html">🕶️ VR</a>
+    <a class="btn" id="present">🎬 Presentación</a>
+  </header>
+  <main class="wrap">
+    <div class="solar-wrap" id="viewport"></div>
+    <div class="notice">Minimal educativo — escalas no reales para mostrar órbitas claramente.</div>
+  </main>
+  <script src="assets/js/solar3d.js"></script>
+</body>
+</html>
