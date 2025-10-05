@@ -1,74 +1,87 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>📱 AR — Modelos</title>
-<link rel="stylesheet" href="assets/css/styles.css"/>
-<script type="module" src="https://unpkg.com/@google/model-viewer@3.3.0/dist/model-viewer.min.js"></script>
-</head><body>
-
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>📱 AR — Sistema Solar / ISS</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <script type="module" src="https://unpkg.com/@google/model-viewer@3.3.0/dist/model-viewer.min.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
 <header class="header">
-  <div class="logo"></div><div class="title">📱 Realidad Aumentada</div>
-  <div class="nav">
-    <a class="btn btn-3d" href="viewer3d.html?src=assets/models/iss-_international_space_station.glb&title=🛰️%20ISS">🪐 3D</a>
-    <a class="btn btn-ar" href="ar.html">📱 AR</a>
-    <a class="btn btn-vr" href="viewervr.html?src=assets/models/iss-_international_space_station.glb&title=🛰️%20ISS">🕶️ VR</a>
-    <a class="btn btn-globe" href="globo.html">🌍 Globo 3D</a>
-    <a class="btn btn-map" href="mapa.html">🛰️ Ground-Track</a>
-    <a class="btn btn-help" href="README.html">❓ Ayuda</a>
-    <div class="lang"><a class="btn" id="btnEN">EN</a> <a class="btn" id="btnES">ES</a></div>
+  <div class="logo"></div><div class="title"><span data-i18n="ar_title">📱 Realidad Aumentada</span></div>
+  <div style="flex:1"></div>
+  <a class="btn" href="index.html"><span data-i18n="nav_home">🏠 Inicio</span></a>
+  <a class="btn" class="btn btn-3d" href="solar.html"><span data-i18n="nav_3d">🪐 3D</span></a>
+  <a class="btn" class="btn btn-vr" href="vr.html"><span data-i18n="nav_vr">🕶️ VR</span></a>
+  <div class="row">
+    <a class="btn" id="btnEN">EN</a>
+    <a class="btn" id="btnES">ES</a>
   </div>
 </header>
-
 <main class="wrap">
   <div class="grid">
     <div class="card">
-      <h3>🛰️ ISS</h3>
-      <p>Modelo local .glb con accesos a 3D / AR / VR.</p>
-      <div class="row">
-        <a class="btn btn-3d" href="viewer3d.html?src=assets/models/iss-_international_space_station.glb&title=%F0%9F%9B%B0%EF%B8%8F%20ISS">👁️ Ver en 3D</a>
-        <a class="btn btn-ar" href="viewerar.html?src=assets/models/iss-_international_space_station.glb&title=%F0%9F%9B%B0%EF%B8%8F%20ISS">📱 Ver en AR</a>
-        <a class="btn btn-vr" href="viewervr.html?src=assets/models/iss-_international_space_station.glb&title=%F0%9F%9B%B0%EF%B8%8F%20ISS">🕶️ Ver en VR</a>
-      </div>
-      <div class="chips"><span class="chip">Local .glb</span><span class="chip">iss-_international_space_station.glb</span></div>
+      <h3>🛰️ ISS (NASA .glb)</h3>
+      <p>Toca “Ver en tu espacio”.</p>
+      <model-viewer data-srcs="https://science.nasa.gov/wp-content/uploads/2025/04/international-space-station-iss-b.glb|https://science.nasa.gov/wp-content/uploads/2023/09/international-space-station-iss-b.glb"
+                    ar ar-modes="webxr scene-viewer quick-look"
+                    camera-controls shadow-intensity="1" exposure="0.9"
+                    style="width:100%;height:60vh;border-radius:16px;overflow:hidden;background:#000">
+      </model-viewer>
+      <div class="chips"><span class="chip">Fuente: NASA 3D Resources</span><span class="chip">.glb</span></div>
     </div>
     <div class="card">
-      <h3>🪐 Sistema Solar (animado)</h3>
-      <p>Modelo local .glb con accesos a 3D / AR / VR.</p>
-      <div class="row">
-        <a class="btn btn-3d" href="viewer3d.html?src=assets/models/solar_system_animation.glb&title=%F0%9F%AA%90%20Sistema%20Solar%20%28animado%29">👁️ Ver en 3D</a>
-        <a class="btn btn-ar" href="viewerar.html?src=assets/models/solar_system_animation.glb&title=%F0%9F%AA%90%20Sistema%20Solar%20%28animado%29">📱 Ver en AR</a>
-        <a class="btn btn-vr" href="viewervr.html?src=assets/models/solar_system_animation.glb&title=%F0%9F%AA%90%20Sistema%20Solar%20%28animado%29">🕶️ Ver en VR</a>
-      </div>
-      <div class="chips"><span class="chip">Local .glb</span><span class="chip">solar_system_animation.glb</span></div>
+      <h3>🪐 Júpiter (NASA .glb)</h3>
+      <p>Modelo ligero para AR/visor.</p>
+      <model-viewer data-srcs="https://science.nasa.gov/wp-content/uploads/2023/09/jupiter.glb"
+                    ar ar-modes="webxr scene-viewer quick-look"
+                    camera-controls shadow-intensity="1" exposure="0.9"
+                    style="width:100%;height:60vh;border-radius:16px;overflow:hidden;background:#000">
+      </model-viewer>
+      <div class="chips"><span class="chip">Fuente: NASA 3D Resources</span><span class="chip">.glb</span></div>
     </div>
-    <div class="card">
-      <h3>🌕 Luna</h3>
-      <p>Modelo local .glb con accesos a 3D / AR / VR.</p>
-      <div class="row">
-        <a class="btn btn-3d" href="viewer3d.html?src=assets/models/moon.glb&title=%F0%9F%8C%95%20Luna">👁️ Ver en 3D</a>
-        <a class="btn btn-ar" href="viewerar.html?src=assets/models/moon.glb&title=%F0%9F%8C%95%20Luna">📱 Ver en AR</a>
-        <a class="btn btn-vr" href="viewervr.html?src=assets/models/moon.glb&title=%F0%9F%8C%95%20Luna">🕶️ Ver en VR</a>
-      </div>
-      <div class="chips"><span class="chip">Local .glb</span><span class="chip">moon.glb</span></div>
-    </div>
-    <div class="card">
-      <h3>✈️ Aviones y satélites</h3>
-      <p>Modelo local .glb con accesos a 3D / AR / VR.</p>
-      <div class="row">
-        <a class="btn btn-3d" href="viewer3d.html?src=assets/models/of_planes_and_satellites.glb&title=%E2%9C%88%EF%B8%8F%20Aviones%20y%20sat%C3%A9lites">👁️ Ver en 3D</a>
-        <a class="btn btn-ar" href="viewerar.html?src=assets/models/of_planes_and_satellites.glb&title=%E2%9C%88%EF%B8%8F%20Aviones%20y%20sat%C3%A9lites">📱 Ver en AR</a>
-        <a class="btn btn-vr" href="viewervr.html?src=assets/models/of_planes_and_satellites.glb&title=%E2%9C%88%EF%B8%8F%20Aviones%20y%20sat%C3%A9lites">🕶️ Ver en VR</a>
-      </div>
-      <div class="chips"><span class="chip">Local .glb</span><span class="chip">of_planes_and_satellites.glb</span></div>
-    </div>
-    <div class="card">
-      <h3>🪐 Júpiter</h3>
-      <p>Modelo local .glb con accesos a 3D / AR / VR.</p>
-      <div class="row">
-        <a class="btn btn-3d" href="viewer3d.html?src=https%3A//science.nasa.gov/wp-content/uploads/2023/09/jupiter.glb&title=%F0%9F%AA%90%20J%C3%BApiter">👁️ Ver en 3D</a>
-        <a class="btn btn-ar" href="viewerar.html?src=https%3A//science.nasa.gov/wp-content/uploads/2023/09/jupiter.glb&title=%F0%9F%AA%90%20J%C3%BApiter">📱 Ver en AR</a>
-        <a class="btn btn-vr" href="viewervr.html?src=https%3A//science.nasa.gov/wp-content/uploads/2023/09/jupiter.glb&title=%F0%9F%AA%90%20J%C3%BApiter">🕶️ Ver en VR</a>
-      </div>
-      <div class="chips"><span class="chip">NASA .glb</span><span class="chip">jupiter.glb</span></div>
-    </div></div>
+  </div>
+
+
+
+
+
+
+
+<footer>
+  <div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+    <div>👩‍🏫<br/>Belén Acuña — 📧 <a href="mailto:belen.acpe@gmail.com">belen.acpe@gmail.com</a> · 📞 <a href="tel:+56962664960">+56 9 6266 4960</a></div>
+    <div>👨‍💻<br/>Francisco Pinto — 📧 <a href="mailto:franciscoandresp@gmail.com">franciscoandresp@gmail.com</a> · 📞 <a href="tel:+56920027992">+56 9 2002 7992</a></div>
+    <div>Hecho con ❤️ para el Liceo Bicentenario de Excelencia Polivalente San Nicolás — Proyecto AR educativo.</div>
+  </div>
+</footer>
+
 </main>
-</body></html>
+  <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js");}</script>
+<script src="assets/js/i18n.js"></script>
+
+<script>
+(function(){
+  function attachFallbacks(mv){
+    const srcsAttr = mv.getAttribute('data-srcs');
+    if(!srcsAttr) return;
+    const urls = srcsAttr.split('|').map(s=>s.trim()).filter(Boolean);
+    if(!urls.length) return;
+    let idx = 0;
+    function tryNext(){
+      if(idx >= urls.length){ mv.insertAdjacentHTML('afterend','<div class="notice">❌ No se pudo cargar el modelo.</div>'); return; }
+      mv.src = urls[idx++];
+    }
+    mv.addEventListener('error', tryNext);
+    if(!mv.src) tryNext();
+  }
+  window.addEventListener('DOMContentLoaded', ()=>{
+    document.querySelectorAll('model-viewer[data-srcs]').forEach(attachFallbacks);
+  });
+})();
+</script>
+
+</body>
+</html>
