@@ -47,7 +47,7 @@ function incDegFromSatrec(satrec){ return satrec.inclo * (180/Math.PI); }
 
 function groundTrack(satrec, minutes=90, stepSec=60){
   const points = [];
-  const now = new Date();
+  const now = new Date(Date.now() + (offsetSec||0)*1000);
   for(let t=0; t<=minutes*60; t+=stepSec){
     const time = new Date(now.getTime() + t*1000);
     const gmst = satellite.gstime(time);
@@ -65,7 +65,7 @@ async function drawFor(norad){
   setStatus('Cargando TLE…');
   let tle;
   try{
-    tle = await fetchTLEbyNORAD(norad);
+    tle = await fetchTLEbyNORAD_cached(norad);
   }catch(e){
     console.warn(e);
     tle = {
@@ -97,7 +97,7 @@ async function drawFor(norad){
   }
 
   // current position
-  const now = new Date();
+  const now = new Date(Date.now() + (offsetSec||0)*1000);
   const gmst = satellite.gstime(now);
   const pv = satellite.propagate(satrec, now);
   const geo = satellite.eciToGeodetic(pv.position, gmst);
@@ -250,4 +250,110 @@ btnPinHUD?.addEventListener('click', ()=>{
 // Initial
 drawFor(document.getElementById('satSelect').value).catch(e=>{
   console.error(e); setStatus('Error inicial'); 
+});
+
+// Time slider state
+let offsetSec = 0;
+const slider = document.getElementById('timeSlider');
+const dtLabel = document.getElementById('dtLabel');
+const btnNow = document.getElementById('btnNow');
+slider?.addEventListener('input', ()=>{
+  offsetSec = parseInt(slider.value||'0',10);
+  if(dtLabel) dtLabel.textContent = (offsetSec>=0? '+':'') + offsetSec + ' s';
+  const norad = document.getElementById('satSelect').value;
+  drawFor(norad);
+});
+btnNow?.addEventListener('click', ()=>{
+  offsetSec = 0; if(slider) slider.value = 0; if(dtLabel) dtLabel.textContent='0 s';
+  const norad = document.getElementById('satSelect').value;
+  drawFor(norad);
+});
+
+// localStorage TLE cache 24h
+function cacheKey(n){ return 'tle_'+n; }
+function putTLE(n, tle){
+  localStorage.setItem(cacheKey(n), JSON.stringify({tle, t: Date.now()}));
+}
+function getTLE(n){
+  const raw = localStorage.getItem(cacheKey(n));
+  if(!raw) return null;
+  try{
+    const obj = JSON.parse(raw);
+    if(Date.now() - obj.t < 24*3600*1000) return obj.tle;
+  }catch(e){}
+  return null;
+}
+
+// Override fetch to use cache
+async function fetchTLEbyNORAD_cached(norad){
+  const c = getTLE(norad);
+  if(c) return c;
+  const t = await fetchTLEbyNORAD(norad);
+  putTLE(norad, t);
+  return t;
+}
+
+// Prediction of passes (simple, 24h, step 30s)
+async function predictPasses(norad){
+  const passesEl = document.getElementById('passes');
+  if(!passesEl) return;
+  passesEl.innerHTML = 'Calculando…';
+  let tle;
+  try{ tle = await fetchTLEbyNORAD_cached(norad); }
+  catch(e){ passesEl.innerHTML = 'Sin TLE'; return; }
+  const satrec = satellite.twoline2satrec(tle.l1, tle.l2);
+
+  // Observer location
+  function withObserver(cb){
+    const latEl = document.getElementById('obsLat');
+    const lonEl = document.getElementById('obsLon');
+    const minEl = parseFloat(document.getElementById('minEl')?.value || '10');
+    const setRes = (res)=> passesEl.innerHTML = res;
+    const lat = parseFloat(latEl?.value||'NaN');
+    const lon = parseFloat(lonEl?.value||'NaN');
+    if(!Number.isNaN(lat) && !Number.isNaN(lon)) return cb({lat, lon, minEl});
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(pos=>{
+        cb({lat: pos.coords.latitude, lon: pos.coords.longitude, minEl});
+      }, _=> cb({lat:0, lon:0, minEl}));
+    }else cb({lat:0, lon:0, minEl});
+  }
+
+  withObserver(({lat, lon, minEl})=>{
+    const start = new Date();
+    const end = new Date(start.getTime() + 24*3600*1000);
+    const step = 30*1000;
+    const obsGd = { longitude: satellite.degreesToRadians(lon), latitude: satellite.degreesToRadians(lat), height: 0.001 };
+    const items = [];
+    let prevAbove = false, riseT=null, maxEl=0, maxT=null;
+
+    for(let t = start.getTime(); t <= end.getTime(); t += step){
+      const time = new Date(t);
+      const gmst = satellite.gstime(time);
+      const pv = satellite.propagate(satrec, time);
+      if(!pv.position || !pv.velocity) continue;
+      const posGd = satellite.eciToGeodetic(pv.position, gmst);
+      const look = satellite.ecfToLookAngles(obsGd, satellite.eciToEcf(pv.position, gmst));
+      const elev = satellite.radiansToDegrees(look.elevation);
+      const above = elev >= minEl;
+      if(above){
+        if(!prevAbove){ riseT = new Date(t); maxEl = elev; maxT = new Date(t); }
+        if(elev > maxEl){ maxEl = elev; maxT = new Date(t); }
+      }
+      if(prevAbove && !above && riseT){
+        items.push({start: riseT, peak: maxT, peakEl: maxEl.toFixed(1)});
+        riseT = null; maxEl=0; maxT=null;
+      }
+      prevAbove = above;
+    }
+    if(items.length===0){ passesEl.innerHTML = '<em>No hay pases ≥ ' + minEl + '° en 24 h.</em>'; return; }
+    const lines = items.slice(0,10).map(p=>{
+      return `• Inicio: ${p.start.toLocaleString()} — Máx: ${p.peak.toLocaleTimeString()} (Elev ${p.peakEl}°)`;
+    });
+    passesEl.innerHTML = '<pre style="white-space:pre-wrap;margin:0">' + lines.join('\n') + '</pre>';
+  });
+}
+document.getElementById('btnPredict')?.addEventListener('click', ()=>{
+  const norad = document.getElementById('satSelect').value;
+  predictPasses(norad);
 });

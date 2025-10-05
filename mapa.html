@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/satellite.js@5.0.0/dist/satellite.min.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
   <header class="header">
@@ -69,7 +70,26 @@
           </div>
           <div class="notice">Color: <span class="chip" style="border-color:#60a5fa;background:rgba(96,165,250,.15)">LEO</span> <span class="chip" style="border-color:#f59e0b;background:rgba(245,158,11,.15)">MEO</span> <span class="chip" style="border-color:#10b981;background:rgba(16,185,129,.15)">GEO</span></div>
         </div>
+        
         <hr/>
+        <div>
+          <label>Tiempo (±12 h)</label>
+          <input id="timeSlider" type="range" min="-43200" max="43200" value="0" step="30"/>
+          <div class="row"><span class="chip">Δt: <span id="dtLabel">0 s</span></span><button class="btn" id="btnNow">⏱️ Ahora</button></div>
+        </div>
+        <hr/>
+        <div>
+          <label>Predicción de pases (24 h)</label>
+          <div class="row">
+            <input id="obsLat" type="number" step="0.0001" placeholder="Lat" />
+            <input id="obsLon" type="number" step="0.0001" placeholder="Lon" />
+            <input id="minEl" type="number" step="1" placeholder="Elev mín (°)" value="10"/>
+            <button class="btn" id="btnPredict">📅 Calcular</button>
+          </div>
+          <div class="notice">Si dejas lat/lon vacíos, usamos tu ubicación del navegador (si la autorizas).</div>
+          <div id="passes" class="card" style="margin-top:8px; max-height:200px; overflow:auto; font-size:12px;"></div>
+        </div>
+    
         <div class="row">
           <label><input type="checkbox" id="drawTrack" checked/> Dibujar traza (90′)</label>
         </div>
@@ -105,16 +125,20 @@
 
 
 
+
+
+
 <footer>
-  <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center">
-    <span>© 2025 SOLARSAT</span> · 
-    <span>👨‍🏫 Francisco Pinto — 📧 <a href="mailto:franciscoandresp@gmail.com">franciscoandresp@gmail.com</a> · 📞 <a href="tel:+56920027992">+56 9 20027992</a></span> ·
-    <span>👩‍🏫 Belén Acuña — 📧 <a href="mailto:belen.acpe@gmail.com">belen.acpe@gmail.com</a> · 📞 <a href="tel:+56962664960">+56 9 6266 4960</a></span>
+  <div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+    <div>👩‍🏫<br/>Belén Acuña — 📧 <a href="mailto:belen.acpe@gmail.com">belen.acpe@gmail.com</a> · 📞 <a href="tel:+56962664960">+56 9 6266 4960</a></div>
+    <div>👨‍💻<br/>Francisco Pinto — 📧 <a href="mailto:franciscoandresp@gmail.com">franciscoandresp@gmail.com</a> · 📞 <a href="tel:+56920027992">+56 9 2002 7992</a></div>
+    <div>Hecho con ❤️ para el Liceo Bicentenario de Excelencia Polivalente San Nicolás — Proyecto AR educativo.</div>
   </div>
 </footer>
 
 </main>
 
   <script src="assets/js/satmap.js"></script>
+  <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js");}</script>
 </body>
 </html>
