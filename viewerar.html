@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Visor AR — SOLARSAT</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+
+  <header class="header nav">
+    <div class="logo" aria-hidden="true"></div>
+    <div class="title">🔭 SOLARSAT</div>
+    <div class="chip">v3 • 2025-10-05</div>
+    <div style="flex:1"></div>
+    <a class="btn" href="solar.html">🪐 3D</a>
+    <a class="btn" href="ar.html">📱 AR</a>
+    <a class="btn" href="vr.html">🕶️ VR</a>
+    <a class="btn" href="globo.html">🌍 Globo 3D</a>
+    <a class="btn" href="mapa.html">🛰️ Ground-Track</a>
+    <a class="btn" href="README.html">❓ Ayuda</a>
+    <div class="row">
+      <a class="btn" id="btnEN">EN</a>
+      <a class="btn" id="btnES">ES</a>
+    </div>
+  </header>
+
+<main class="container">
+  <h1 id="title">Visor AR</h1>
+  <model-viewer id="mv" src="" alt="modelo AR" camera-controls ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" shadow-intensity="1"></model-viewer>
+  <p>Si estás en un dispositivo compatible, toca el botón AR que aparece en el visor.</p>
+</main>
+<script>
+  (function() {
+    const p = new URLSearchParams(location.search);
+    const src = p.get('src') || '';
+    const title = decodeURIComponent(p.get('title')||'').trim();
+    const mv = document.getElementById('mv');
+    const t = document.getElementById('title');
+    if (title) t.textContent = title;
+    if (src) {
+      mv.src = src;
+      mv.setAttribute('crossorigin','anonymous');
+    }
+  })();
+</script>
+</body>
+</html>

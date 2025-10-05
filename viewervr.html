@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Visor VR — SOLARSAT</title>
+  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+</head>
+<body>
+
+  <header class="header nav">
+    <div class="logo" aria-hidden="true"></div>
+    <div class="title">🔭 SOLARSAT</div>
+    <div class="chip">v3 • 2025-10-05</div>
+    <div style="flex:1"></div>
+    <a class="btn" href="solar.html">🪐 3D</a>
+    <a class="btn" href="ar.html">📱 AR</a>
+    <a class="btn" href="vr.html">🕶️ VR</a>
+    <a class="btn" href="globo.html">🌍 Globo 3D</a>
+    <a class="btn" href="mapa.html">🛰️ Ground-Track</a>
+    <a class="btn" href="README.html">❓ Ayuda</a>
+    <div class="row">
+      <a class="btn" id="btnEN">EN</a>
+      <a class="btn" id="btnES">ES</a>
+    </div>
+  </header>
+
+<main class="container">
+  <h1 id="title">Visor VR</h1>
+  <a-scene embedded renderer="antialias: true">
+    <a-assets>
+      <a-asset-item id="model" src=""></a-asset-item>
+    </a-assets>
+    <a-entity gltf-model="#model" position="0 1.2 -2" rotation="0 45 0"></a-entity>
+    <a-sky color="#ECECEC"></a-sky>
+    <a-entity position="0 1.6 0">
+      <a-camera wasd-controls-enabled="true"></a-camera>
+    </a-entity>
+  </a-scene>
+</main>
+<script>
+  (function() {
+    const p = new URLSearchParams(location.search);
+    const src = p.get('src') || '';
+    const title = decodeURIComponent(p.get('title')||'').trim();
+    const t = document.getElementById('title');
+    if (title) t.textContent = title;
+    if (src) {
+      const asset = document.getElementById('model');
+      asset.setAttribute('src', src);
+    }
+  })();
+</script>
+</body>
+</html>
