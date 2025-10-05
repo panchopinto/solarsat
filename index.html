@@ -1,112 +1,33 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>🔭 SOLARSAT — Repositorio interactivo</title>
-  <meta name="description" content="Sistema Solar 3D + AR + VR + Mapa 2D con ground-track de satélites.">
-  <link rel="stylesheet" href="assets/css/styles.css"/>
-  <link rel="icon" href="assets/img/favicon.svg">
-  <link rel="manifest" href="manifest.webmanifest">
-</head>
-<body>
-  <header class="header nav">
-    <div class="logo" aria-hidden="true"></div>
-    <div class="title">🔭 SOLARSAT</div>
-    <div class="chip">v3 • 2025-10-05</div>
-    <div style="flex:1"></div>
-    <a class="btn" class="btn btn-3d" href="solar.html"><span data-i18n="nav_3d">🪐 3D</span></a>
-    <a class="btn" class="btn btn-ar" href="ar.html"><span data-i18n="nav_ar">📱 AR</span></a>
-    <a class="btn" class="btn btn-vr" href="vr.html"><span data-i18n="nav_vr">🕶️ VR</span></a>
-    <a class="btn" class="btn btn-globe" href="globo.html"><span data-i18n="nav_globe">🌍 Globo 3D</span></a>
-    <a class="btn" class="btn btn-map" href="mapa.html"><span data-i18n="index_title_map"><span data-i18n="nav_map">🛰️ Ground-Track</span></span></a>
-    <a class="btn" class="btn btn-help" href="README.html"><span data-i18n="index_title_help"><span data-i18n="nav_help">❓ Ayuda</span></span></a>
-    <div class="row">
-    <a class="btn" id="btnEN">EN</a>
-    <a class="btn" id="btnES">ES</a>
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SOLARSAT — Repositorio interactivo</title>
+<link rel="stylesheet" href="assets/css/styles.css"/>
+</head><body>
+
+<header class="header">
+  <div class="logo"></div><div class="title">SOLARSAT — Repositorio interactivo</div>
+  <div class="nav">
+    <a class="btn btn-3d" href="viewer3d.html?src=assets/models/iss-_international_space_station.glb&title=🛰️%20ISS">🪐 3D</a>
+    <a class="btn btn-ar" href="ar.html">📱 AR</a>
+    <a class="btn btn-vr" href="viewervr.html?src=assets/models/iss-_international_space_station.glb&title=🛰️%20ISS">🕶️ VR</a>
+    <a class="btn btn-globe" href="globo.html">🌍 Globo 3D</a>
+    <a class="btn btn-map" href="mapa.html">🛰️ Ground-Track</a>
+    <a class="btn btn-help" href="README.html">❓ Ayuda</a>
+    <div class="lang"><a class="btn" id="btnEN">EN</a> <a class="btn" id="btnES">ES</a></div>
   </div>
 </header>
-<script>
-(function(){
-  function applyClassMode(on){
-    document.documentElement.classList.toggle('class-mode', !!on);
-    if(on && !document.getElementById('classHUD')){
-      const hud = document.createElement('div');
-      hud.id='classHUD';
-      hud.innerHTML = '<span id="utcClock">--:--:-- UTC</span> · <span id="classInfo">Modo Clase</span>';
-      document.body.appendChild(hud);
-      setInterval(()=>{
-        const d = new Date();
-        document.getElementById('utcClock').textContent =
-          d.getUTCHours().toString().padStart(2,'0') + ':' +
-          d.getUTCMinutes().toString().padStart(2,'0') + ':' +
-          d.getUTCSeconds().toString().padStart(2,'0') + ' UTC';
-      }, 1000);
-    }else if(!on){
-      const hud = document.getElementById('classHUD');
-      if(hud) hud.remove();
-    }
-  }
-  window.SOLARSAT = window.SOLARSAT || {};
-  window.SOLARSAT.applyClassMode = applyClassMode;
-  // Restore from localStorage
-  applyClassMode(localStorage.getItem('classMode')==='1');
-  const btn = document.getElementById('btnClassMode');
-  if(btn){
-    btn.addEventListener('click', ()=>{
-      const on = !(localStorage.getItem('classMode')==='1');
-      localStorage.setItem('classMode', on?'1':'0');
-      applyClassMode(on);
-    });
-  }
-})();
-</script>
 
-  <main class="wrap">
-    <section class="grid">
-      <a class="card" data-variant="1" class="btn btn-3d" href="solar.html">
-        <h3><span data-i18n="index_title_3d">🪐 Sistema Solar 3D</span></h3>
-        <p><span data-i18n="index_desc_3d">Visualización con órbitas y panel rápido AR/VR.</span></p>
-        <div class="chips"><div class="chip">Three.js</div><div class="chip">AR/VR toggle</div></div>
-      </a>
-      <a class="card" data-variant="2" class="btn btn-ar" href="ar.html">
-        <h3><span data-i18n="index_title_ar">📱 Realidad Aumentada</span></h3>
-        <p><span data-i18n="index_desc_ar">ISS y Júpiter .glb (model-viewer/WebXR).</span></p>
-        <div class="chips"><div class="chip">.glb</div><div class="chip">WebXR</div></div>
-      </a>
-      <a class="card" data-variant="4" class="btn btn-vr" href="vr.html">
-        <h3><span data-i18n="index_title_vr">🕶️ Realidad Virtual</span></h3>
-        <p><span data-i18n="index_desc_vr">Escena simple con ISS (A-Frame).</span></p>
-        <div class="chips"><div class="chip">A-Frame</div></div>
-      </a>
-      <a class="card" data-variant="3" class="btn btn-map" href="mapa.html">
-        <h3><span data-i18n="index_title_map"><span data-i18n="nav_map">🛰️ Ground-Track</span></span></h3>
-        <p><span data-i18n="index_desc_map">Búsqueda incremental, filtro LEO/MEO/GEO, HUD con “Seguir”.</span></p>
-        <div class="chips"><div class="chip">Leaflet</div><div class="chip">satellite.js</div></div>
-      </a>
-      <a class="card" class="btn btn-help" href="README.html">
-        <h3><span data-i18n="index_title_help"><span data-i18n="nav_help">❓ Ayuda</span></span></h3>
-        <p><span data-i18n="index_desc_help">Guía y troubleshooting.</span></p>
-      </a>
-    </section>
-    
-  
-
-
-
-
-
-
-<footer>
-  <div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
-    <div>👩‍🏫<br/>Belén Acuña — 📧 <a href="mailto:belen.acpe@gmail.com">belen.acpe@gmail.com</a> · 📞 <a href="tel:+56962664960">+56 9 6266 4960</a></div>
-    <div>👨‍💻<br/>Francisco Pinto — 📧 <a href="mailto:franciscoandresp@gmail.com">franciscoandresp@gmail.com</a> · 📞 <a href="tel:+56920027992">+56 9 2002 7992</a></div>
+<main class="wrap">
+  <section class="grid">
+    <a class="card" href="solar.html"><h3>🪐 Sistema Solar 3D</h3><p>Visualización con órbitas y panel rápido AR/VR.</p><div class="chips"><span class="chip">Three.js</span><span class="chip">AR/VR toggle</span></div></a>
+    <a class="card" href="ar.html"><h3>📱 Realidad Aumentada</h3><p>Modelos locales .glb + visores.</p><div class="chips"><span class="chip">.glb</span><span class="chip">WebXR</span></div></a>
+    <a class="card" href="vr.html"><h3>🕶️ Realidad Virtual</h3><p>Escena simple con ISS (A-Frame).</p><div class="chips"><span class="chip">A-Frame</span></div></a>
+    <a class="card" href="mapa.html"><h3>🛰️ Ground-Track</h3><p>Búsqueda incremental, filtro LEO/MEO/GEO, HUD con “Seguir”.</p><div class="chips"><span class="chip">Leaflet</span><span class="chip">satellite.js</span></div></a>
+    <a class="card" href="README.html"><h3>❓ Ayuda</h3><p>Guía y troubleshooting.</p></a>
+  </section>
+  <footer>
+    <div>Belén Acuña — <a href="mailto:belen.acpe@gmail.com">belen.acpe@gmail.com</a> · +56 9 6266 4960</div>
+    <div>Francisco Pinto — <a href="mailto:franciscoandresp@gmail.com">franciscoandresp@gmail.com</a> · +56 9 2002 7992</div>
     <div>Hecho con ❤️ para el Liceo Bicentenario de Excelencia Polivalente San Nicolás — Proyecto AR educativo.</div>
-  </div>
-</footer>
-
-</main>
-  <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js");}</script>
-<script src="assets/js/i18n.js"></script>
-</body>
-</html>
+  </footer>
+</main></body></html>

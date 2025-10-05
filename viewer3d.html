@@ -1,0 +1,35 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>👁️ Visor 3D — SOLARSAT</title>
+<link rel="stylesheet" href="assets/css/styles.css"/>
+<script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.157.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://unpkg.com/three@0.157.0/examples/js/loaders/GLTFLoader.js"></script>
+</head><body>
+
+<header class="header">
+  <div class="logo"></div><div class="title">👁️ Visor 3D</div>
+  <div class="nav">
+    <a class="btn btn-3d" href="viewer3d.html?src=assets/models/iss-_international_space_station.glb&title=🛰️%20ISS">🪐 3D</a>
+    <a class="btn btn-ar" href="ar.html">📱 AR</a>
+    <a class="btn btn-vr" href="viewervr.html?src=assets/models/iss-_international_space_station.glb&title=🛰️%20ISS">🕶️ VR</a>
+    <a class="btn btn-globe" href="globo.html">🌍 Globo 3D</a>
+    <a class="btn btn-map" href="mapa.html">🛰️ Ground-Track</a>
+    <a class="btn btn-help" href="README.html">❓ Ayuda</a>
+    <div class="lang"><a class="btn" id="btnEN">EN</a> <a class="btn" id="btnES">ES</a></div>
+  </div>
+</header>
+
+<main class="wrap"><div class="solar-wrap" id="stage"></div></main>
+<script>(function(){const p=new URLSearchParams(location.search);const src=p.get('src');const title=p.get('title')||'Modelo';document.querySelector('.title').textContent='👁️ '+title;
+const el=document.getElementById('stage');const scene=new THREE.Scene();scene.background=new THREE.Color(0x05070f);
+const camera=new THREE.PerspectiveCamera(60,el.clientWidth/el.clientHeight,0.1,5000);camera.position.set(3,2,4);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(el.clientWidth,el.clientHeight);el.appendChild(renderer.domElement);
+const controls=new THREE.OrbitControls(camera,renderer.domElement);controls.enableDamping=true;
+scene.add(new THREE.HemisphereLight(0xffffff,0x222233,1.2));const dir=new THREE.DirectionalLight(0xffffff,1);dir.position.set(5,5,5);scene.add(dir);
+const grid=new THREE.GridHelper(20,20,0x334455,0x223344);grid.material.opacity=.2;grid.material.transparent=true;scene.add(grid);
+const loader=new THREE.GLTFLoader();loader.load(src,g=>{const root=g.scene;const b=new THREE.Box3().setFromObject(root);const s=new THREE.Vector3();b.getSize(s);const c=new THREE.Vector3();b.getCenter(c);
+const k=4/Math.max(s.x,s.y,s.z||1);root.scale.setScalar(k);root.position.sub(c.multiplyScalar(k));scene.add(root);},undefined,e=>{const d=document.createElement('div');d.className='notice';d.style.padding='12px';d.textContent='No se pudo cargar: '+src;el.appendChild(d);});
+function loop(){requestAnimationFrame(loop);controls.update();renderer.render(scene,camera);}loop();
+window.addEventListener('resize',()=>{const w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);});})();</script>
+</body></html>
