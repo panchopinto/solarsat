@@ -1,9 +1,16 @@
 <!doctype html><html lang='es'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>SOLARSAT — Ayuda</title><link rel='stylesheet' href='assets/css/styles.css'/>  <link rel="manifest" href="manifest.webmanifest">
-</head><body><header class='header'><div class='logo'></div><div class='title'>❓ Ayuda — SOLARSAT</div><div style='flex:1'></div><a class='btn' href='index.html'><span data-i18n="nav_home">🏠 Inicio</span></a></header><main class='wrap'><article class='card'><h2>Tips</h2><p>Si el TLE falla, hay fallback ISS offline. Usa “Cargar Activos (lento)” para poblar el selector con cientos de satélites.</p></article>
+</head><body><header class='header'><div class='logo'></div><div class='title'>❓ Ayuda — SOLARSAT</div><div style='flex:1'></div><a class='btn' href='index.html'><span data-i18n="nav_home">🏠 Inicio</span></a></header><main class='wrap'><article class='card'><h2>Tips</h2><p>SOLARSAT
+Repositorio listo para abrir en local y correr todo en el navegador: Sistema Solar 3D + Mapa 2D con ground-track y filtros por altitud/inclinación.
 
-
-
-
+Cómo ejecutar
+Solo abre index.html haciendo doble clic. Todo usa CDNs con HTTPS (no requiere servidor local).
+Para el mapa, se consultan TLEs desde CelesTrak por HTTPS. Si estás offline, verás demo con ISS precargada.
+Si “no cargan los satélites” (checklist)
+Bloqueo por conexión: ¿Estás sin internet o detrás de un firewall que bloquea celestrak.org?
+CORS/HTTPS: El repo usa fetch hacia HTTPS, que funciona desde file:// en Chrome/Edge. Si tu navegador bloquea, prueba abrir con Live Server (VSCode) o python -m http.server.
+Demasiados satélites: El filtro por defecto trae pocos objetos (ISS, HUBBLE, NOAA). Activa “Cargar Activos (lento)” para más, o mantén el conjunto pequeño.
+Reloj del sistema: Si tu hora local está fuera de rango, la traza puede verse desfasada. Ajusta el reloj.
+Errores de consola: Abre F12 y revisa. El panel superior mostrará el último error legible.</p></article>
 
 
 <footer>
