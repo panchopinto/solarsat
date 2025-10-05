@@ -381,3 +381,150 @@ document.getElementById('btnPredict')?.addEventListener('click', ()=>{
   startCycle();
   setInterval(startCycle, 5000);
 })();
+
+// Footprint & FOV layers
+let footprintCircle = null;
+let fovCircle = null;
+
+function earthHorizonRadiusMeters(altKm){
+  const R = 6371; // km
+  const h = Math.max(altKm, 0.001);
+  // ground range central angle
+  const alpha = Math.acos(R/(R+h));
+  return R * alpha * 1000; // meters (arc length approx)
+}
+
+function drawFootprint(lat, lon, altKm){
+  const radius = earthHorizonRadiusMeters(altKm);
+  if(footprintCircle) map.removeLayer(footprintCircle);
+  footprintCircle = L.circle([lat, lon], {radius, color:'#22d3ee', weight:1, fillOpacity:0.08}).addTo(map);
+}
+
+function drawFOV(lat, lon, altKm, fovDeg){
+  const R = 6371*1000; // m
+  const h = Math.max(altKm*1000, 1);
+  const theta = Math.max(5, Math.min(60, fovDeg)) * Math.PI/180; // half-angle approximation
+  // simple flat approximation: ground radius ~= h * tan(theta)
+  const radius = Math.min(3000000, h * Math.tan(theta));
+  if(fovCircle) map.removeLayer(fovCircle);
+  fovCircle = L.circle([lat, lon], {radius, color:'#f59e0b', weight:1, fillOpacity:0.08}).addTo(map);
+}
+
+document.getElementById('btnFootprint')?.addEventListener('click', ()=>{
+  if(!positionMarker){ alert('Primero carga un satélite.'); return; }
+  const ll = positionMarker.getLatLng();
+  const norad = document.getElementById('satSelect').value;
+  fetchTLEbyNORAD_cached(norad).then(tle=>{
+    const satrec = satellite.twoline2satrec(tle.l1, tle.l2);
+    const a = 1/(satrec.no/ (2*Math.PI));
+    const alt = altKmFromA(a);
+    drawFootprint(ll.lat, ll.lng, alt);
+  });
+});
+
+document.getElementById('btnFOV')?.addEventListener('click', ()=>{
+  if(!positionMarker){ alert('Primero carga un satélite.'); return; }
+  const ll = positionMarker.getLatLng();
+  const fov = parseFloat(document.getElementById('fovDeg').value||'20');
+  const norad = document.getElementById('satSelect').value;
+  fetchTLEbyNORAD_cached(norad).then(tle=>{
+    const satrec = satellite.twoline2satrec(tle.l1, tle.l2);
+    const a = 1/(satrec.no/ (2*Math.PI));
+    const alt = altKmFromA(a);
+    drawFOV(ll.lat, ll.lng, alt, fov);
+  });
+});
+
+// Exporters
+function exportKML(feature){
+  const coords = feature.features[0].geometry.coordinates; // [lon,lat]
+  const kml = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document><Placemark><name>Ground Track</name>
+    <LineString><coordinates>
+      ${coords.map(c=>c.join(',')).join(' ')}
+    </coordinates></LineString>
+  </Placemark></Document>
+</kml>`;
+  const blob = new Blob([kml], {type:'application/vnd.google-earth.kml+xml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='groundtrack.kml'; a.click();
+  URL.revokeObjectURL(url);
+}
+function exportGPX(feature){
+  const coords = feature.features[0].geometry.coordinates; // [lon,lat]
+  const gpx = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx version="1.1" creator="SOLARSAT" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk><name>Ground Track</name><trkseg>
+    ${coords.map(c=>`<trkpt lat="${c[1]}" lon="${c[0]}"></trkpt>`).join('\n    ')}
+  </trkseg></trk>
+</gpx>`;
+  const blob = new Blob([gpx], {type:'application/gpx+xml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='groundtrack.gpx'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('btnKML')?.addEventListener('click', ()=>{
+  if(!lastGeoJSON){ alert('No hay traza (activa "Dibujar traza").'); return; }
+  exportKML(lastGeoJSON);
+});
+document.getElementById('btnGPX')?.addEventListener('click', ()=>{
+  if(!lastGeoJSON){ alert('No hay traza (activa "Dibujar traza").'); return; }
+  exportGPX(lastGeoJSON);
+});
+
+// Deep link builder
+function buildDeepLink(){
+  const params = new URLSearchParams();
+  params.set('norad', document.getElementById('satSelect').value);
+  params.set('reg', (document.getElementById('regimeFilter')||{value:'ALL'}).value);
+  params.set('altMin', document.getElementById('altMin').value);
+  params.set('altMax', document.getElementById('altMax').value);
+  params.set('incMin', document.getElementById('incMin').value);
+  params.set('incMax', document.getElementById('incMax').value);
+  params.set('follow', document.getElementById('followSat').checked ? '1' : '0');
+  params.set('track', document.getElementById('drawTrack').checked ? '1' : '0');
+  params.set('dt', (window.offsetSec||0).toString());
+  return location.origin + location.pathname + '?' + params.toString();
+}
+document.getElementById('btnLink')?.addEventListener('click', ()=>{
+  const url = buildDeepLink();
+  navigator.clipboard?.writeText(url).then(()=> setStatus('Enlace copiado')).catch(()=> alert(url));
+});
+
+// Apply deep link on load
+(function applyDeepLink(){
+  const q = new URLSearchParams(location.search);
+  const norad = q.get('norad'); if(norad){ document.getElementById('satSelect').value = norad; }
+  const reg = q.get('reg'); if(reg) (document.getElementById('regimeFilter')||{}).value = reg;
+  ['altMin','altMax','incMin','incMax'].forEach(k=>{ if(q.get(k)) document.getElementById(k).value = q.get(k); });
+  if(q.get('follow')) document.getElementById('followSat').checked = (q.get('follow')==='1');
+  if(q.get('track')) document.getElementById('drawTrack').checked = (q.get('track')==='1');
+  if(q.get('dt')){ window.offsetSec = parseInt(q.get('dt'),10)||0; const s = document.getElementById('timeSlider'); const l=document.getElementById('dtLabel'); if(s){ s.value = window.offsetSec; } if(l){ l.textContent = (window.offsetSec>=0?'+':'')+window.offsetSec+' s'; } }
+})();
+
+// Presets (Modo Clase Pro)
+document.getElementById('btnApplyPreset')?.addEventListener('click', async ()=>{
+  const v = document.getElementById('presetScene').value;
+  const select = document.getElementById('satSelect');
+  if(v==='iss-chile'){
+    // ISS NORAD 25544, centrar en Chile y seguir
+    let opt = Array.from(select.options).find(o=>o.value==='25544');
+    if(!opt){ opt = document.createElement('option'); opt.value='25544'; opt.text='ISS (ZARYA)'; select.add(opt, 0); }
+    select.value = '25544';
+    document.getElementById('followSat').checked = true;
+    map.setView([-35.675, -71.543], 4); // Chile aprox
+    await drawFor('25544');
+  }else if(v==='ring-geo'){
+    // Cargar activos y filtrar GEO; desactivar seguir, zoom a ecuador
+    document.getElementById('regimeFilter').value='GEO';
+    document.getElementById('followSat').checked=false;
+    map.setView([0,0], 2);
+    document.getElementById('btnActive').click();
+  }else if(v==='passes-hoy'){
+    // Mantener sat actual y abrir predicción
+    document.getElementById('minEl').value = '15';
+    document.getElementById('btnPredict').click();
+  }
+});

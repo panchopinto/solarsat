@@ -137,6 +137,36 @@
           <button class="btn" id="btnExport">⬇️ Exportar GeoJSON</button>
         </div>
         <div class="notice">Tip: activa “Cargar Activos (lento)” para miles de TLEs (puede tardar).</div>
+        <hr/>
+        <div>
+          <label>Cobertura</label>
+          <div class="row">
+            <button class="btn btn-success" id="btnFootprint">🌐 Footprint</button>
+            <label class="chip">FOV (°) <input id="fovDeg" type="number" value="20" min="5" max="60" step="1" style="width:80px"/></label>
+            <button class="btn btn-primary" id="btnFOV">🎯 Dibujar FOV</button>
+          </div>
+        </div>
+        <hr/>
+        <div>
+          <label>Exportar & Enlace</label>
+          <div class="row">
+            <button class="btn btn-primary" id="btnKML">📤 KML</button>
+            <button class="btn btn-pink" id="btnGPX">📤 GPX</button>
+            <button class="btn btn-warn" id="btnLink">🔗 Copiar enlace</button>
+          </div>
+        </div>
+        <hr/>
+        <div>
+          <label>🎓 Modo Clase Pro (escenas)</label>
+          <select id="presetScene">
+            <option value="">Selecciona una escena…</option>
+            <option value="iss-chile">ISS sobre Chile</option>
+            <option value="ring-geo">Anillo GEO</option>
+            <option value="passes-hoy">Pases de hoy</option>
+          </select>
+          <button class="btn btn-success" id="btnApplyPreset">▶️ Aplicar</button>
+        </div>
+    
         <div class="row">
           <button class="btn" id="btnActive">🗂️ Cargar Activos (lento)</button>
         </div>

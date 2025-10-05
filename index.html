@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
-  <header class="header">
+  <header class="header nav">
     <div class="logo" aria-hidden="true"></div>
     <div class="title">🔭 SOLARSAT</div>
     <div class="chip">v3 • 2025-10-05</div>
@@ -60,22 +60,22 @@
 
   <main class="wrap">
     <section class="grid">
-      <a class="card" href="solar.html">
+      <a class="card" data-variant="1" href="solar.html">
         <h3>🪐 Sistema Solar 3D</h3>
         <p>Visualización con órbitas y panel rápido AR/VR.</p>
         <div class="chips"><div class="chip">Three.js</div><div class="chip">AR/VR toggle</div></div>
       </a>
-      <a class="card" href="ar.html">
+      <a class="card" data-variant="2" href="ar.html">
         <h3>📱 Realidad Aumentada</h3>
         <p>ISS y Júpiter .glb (model-viewer/WebXR).</p>
         <div class="chips"><div class="chip">.glb</div><div class="chip">WebXR</div></div>
       </a>
-      <a class="card" href="vr.html">
+      <a class="card" data-variant="4" href="vr.html">
         <h3>🕶️ Realidad Virtual</h3>
         <p>Escena simple con ISS (A-Frame).</p>
         <div class="chips"><div class="chip">A-Frame</div></div>
       </a>
-      <a class="card" href="mapa.html">
+      <a class="card" data-variant="3" href="mapa.html">
         <h3>🛰️ Ground-Track</h3>
         <p>Búsqueda incremental, filtro LEO/MEO/GEO, HUD con “Seguir”.</p>
         <div class="chips"><div class="chip">Leaflet</div><div class="chip">satellite.js</div></div>

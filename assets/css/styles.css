@@ -77,3 +77,37 @@ hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:8px 0}
   border-radius: 14px; padding: 8px 12px; font-size: 22px; z-index: 1000;
   box-shadow: 0 8px 24px rgba(0,0,0,.35);
 }
+
+/* Variantes de color */
+:root{
+  --grad1: linear-gradient(180deg, rgba(124,58,237,.25), rgba(59,130,246,.15));
+  --grad2: linear-gradient(180deg, rgba(16,185,129,.25), rgba(34,211,238,.12));
+  --grad3: linear-gradient(180deg, rgba(245,158,11,.25), rgba(244,63,94,.12));
+  --grad4: linear-gradient(180deg, rgba(99,102,241,.25), rgba(236,72,153,.12));
+}
+.card[data-variant="1"]{ background: var(--grad1); border-color: rgba(124,58,237,.35) }
+.card[data-variant="2"]{ background: var(--grad2); border-color: rgba(16,185,129,.35) }
+.card[data-variant="3"]{ background: var(--grad3); border-color: rgba(245,158,11,.35) }
+.card[data-variant="4"]{ background: var(--grad4); border-color: rgba(236,72,153,.35) }
+
+.btn-primary{
+  background: linear-gradient(180deg, rgba(59,130,246,.35), rgba(59,130,246,.15));
+  border-color: rgba(59,130,246,.45);
+  box-shadow: 0 8px 24px rgba(59,130,246,.25);
+}
+.btn-success{
+  background: linear-gradient(180deg, rgba(16,185,129,.35), rgba(16,185,129,.15));
+  border-color: rgba(16,185,129,.45);
+  box-shadow: 0 8px 24px rgba(16,185,129,.25);
+}
+.btn-warn{
+  background: linear-gradient(180deg, rgba(245,158,11,.35), rgba(245,158,11,.15));
+  border-color: rgba(245,158,11,.45);
+  box-shadow: 0 8px 24px rgba(245,158,11,.25);
+}
+.btn-pink{
+  background: linear-gradient(180deg, rgba(236,72,153,.35), rgba(236,72,153,.15));
+  border-color: rgba(236,72,153,.45);
+  box-shadow: 0 8px 24px rgba(236,72,153,.25);
+}
+.nav .btn{ margin-left:8px }
