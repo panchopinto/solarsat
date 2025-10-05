@@ -1,9 +1,9 @@
 
-import { el, setTheme } from './ui.js';
+import { setTheme } from './ui.js';
 
-let scene, camera, renderer, controls, sun;
+let scene, camera, renderer;
 const AU = 149597870; // km
-const SCALE = 4000000; // km per unit (aggressive scale)
+const SCALE = 4000000; // km per unit
 const PLANETS = [
   {name:'Mercurio', color:0xb6b6b6, radius: 2440, dist: 0.39*AU, speed: 4.74},
   {name:'Venus',    color:0xe0d6a8, radius: 6052, dist: 0.72*AU, speed: 3.50},
@@ -14,7 +14,6 @@ const PLANETS = [
   {name:'Urano',    color:0x9ad0f5, radius:25362, dist:19.20*AU, speed: 0.68},
   {name:'Neptuno',  color:0x6da8ff, radius:24622, dist:30.05*AU, speed: 0.54},
 ];
-
 const meshes = [];
 
 async function init(){
@@ -39,22 +38,18 @@ async function init(){
   const stars = new THREE.Mesh(
     new THREE.SphereGeometry(1e7, 32, 32),
     new THREE.MeshBasicMaterial({ map:starTex, side:THREE.BackSide })
-  );
-  scene.add(stars);
+  ); scene.add(stars);
 
-  // Sun
   const sunTex = new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/sun.png');
-  sun = new THREE.Mesh(new THREE.SphereGeometry(696340/SCALE, 64, 64), new THREE.MeshBasicMaterial({ map: sunTex }));
+  const sun = new THREE.Mesh(new THREE.SphereGeometry(696340/SCALE, 64, 64), new THREE.MeshBasicMaterial({ map: sunTex }));
   scene.add(sun);
 
-  // Planets
   for(const p of PLANETS){
     const m = new THREE.Mesh(
       new THREE.SphereGeometry(Math.max(2, p.radius/SCALE), 48, 48),
       new THREE.MeshPhongMaterial({ color: p.color })
     );
     m.userData = { angle: Math.random()*Math.PI*2, speed: p.speed/50, radius: p.dist/SCALE, name: p.name };
-    // orbit ring
     const ring = new THREE.Mesh(new THREE.RingGeometry(m.userData.radius-0.1, m.userData.radius+0.1, 256), new THREE.MeshBasicMaterial({ color:0x2d3966, side:THREE.DoubleSide }));
     ring.rotation.x = Math.PI/2; scene.add(ring);
     scene.add(m); meshes.push(m);

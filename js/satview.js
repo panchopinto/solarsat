@@ -1,9 +1,11 @@
 
-import { el, on, captureCanvas, setTheme } from './ui.js';
+import { el, on, captureCanvas, setTheme, clamp } from './ui.js';
 
-let scene, camera, renderer, earth, atmosphere, satellites = [], orbitLines = [], animationId;
+let scene, camera, renderer, earth, atmosphere, satellites = [], orbitLines = [];
 const R_EARTH = 6371; // km
-const SCALE = 100; // 1 unit = 100 km approx (tune rendering scale)
+const SCALE = 100; // 1 unit = 100 km
+
+let filters = { altMin: 0, altMax: 40000, incMin: 0, incMax: 180 };
 
 async function init(){
   scene = new THREE.Scene();
@@ -47,14 +49,12 @@ async function init(){
   const starsMat = new THREE.MeshBasicMaterial({ side: THREE.BackSide, map: texLoader.load('https://threejs.org/examples/textures/galaxy_starfield.png') });
   const stars = new THREE.Mesh(starsGeo, starsMat); scene.add(stars);
 
-  // Theme default
   setTheme(true);
-
   animate();
 }
 
 function animate(){
-  animationId = requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
 
@@ -76,38 +76,47 @@ function tleBlocks(tleText){
   return blocks;
 }
 
+function passFilters(satrec){
+  // inclination in degrees
+  const inc = satrec.inclo * 180/Math.PI;
+  if(inc < filters.incMin || inc > filters.incMax) return false;
+  // altitude from current position
+  const now = new Date();
+  const pf = satellite.propagate(satrec, now);
+  if(!pf.position) return false;
+  const rmag = Math.sqrt(pf.position.x*pf.position.x + pf.position.y*pf.position.y + pf.position.z*pf.position.z);
+  const alt = rmag - R_EARTH;
+  if(alt < filters.altMin || alt > filters.altMax) return false;
+  return true;
+}
+
 function addSatelliteFromTLE(block, color=0x00e5ff){
-  // Propagate in animation loop
+  const satrec = satellite.twoline2satrec(block.l1, block.l2);
+  if(!passFilters(satrec)) return;
+
   const mesh = new THREE.Mesh(new THREE.SphereGeometry(40/SCALE, 12, 12), new THREE.MeshBasicMaterial({color}));
   scene.add(mesh);
 
-  // orbit path (approx sample points)
+  // orbit path (sample points)
   const points = [];
-  const satrec = satellite.twoline2satrec(block.l1, block.l2);
   const now = new Date();
-  for(let t=0; t<=90; t+=2){ // ~3 orbits worth of samples *rough*
+  for(let t=0; t<=120; t+=3){
     const time = new Date(now.getTime() + t*60*1000);
-    const pos = positionEci(satrec, time);
-    if(pos){
-      const v3 = eciToThree(pos);
+    const pf = satellite.propagate(satrec, time);
+    if(pf.position){
+      const v3 = eciToThree(pf.position);
       points.push(v3);
     }
   }
   if(points.length>2){
-    const curve = new THREE.CatmullRomCurve3(points, true);
-    const geom = new THREE.TubeGeometry(curve, 200, 8/SCALE, 8, true);
+    const curve = new THREE.CatmullRomCurve3(points, false);
+    const geom = new THREE.TubeGeometry(curve, 240, 8/SCALE, 8, false);
     const mat = new THREE.MeshBasicMaterial({ color:0x3556ff, transparent:true, opacity:0.4 });
     const tube = new THREE.Mesh(geom, mat);
     scene.add(tube); orbitLines.push(tube);
   }
 
   satellites.push({ name:block.name, satrec, mesh, color });
-}
-
-function positionEci(satrec, date){
-  const pf = satellite.propagate(satrec, date);
-  if(!pf.position) return null;
-  return pf.position; // km in TEME
 }
 
 function eciToThree(eci){
@@ -118,13 +127,12 @@ function eciToThree(eci){
 function updateSatelliteMeshes(){
   const now = new Date();
   for(const s of satellites){
-    const pos = positionEci(s.satrec, now);
-    if(!pos) continue;
-    const v3 = eciToThree(pos);
+    const pf = satellite.propagate(s.satrec, now);
+    if(!pf.position) continue;
+    const v3 = eciToThree(pf.position);
     s.mesh.position.copy(v3);
   }
 }
-
 setInterval(updateSatelliteMeshes, 1000);
 
 async function loadGroup(group){
@@ -133,9 +141,12 @@ async function loadGroup(group){
     const url = `https://celestrak.org/NORAD/elements/gp.php?GROUP=${encodeURIComponent(group)}&FORMAT=tle`;
     const txt = await fetch(url).then(r=>r.text());
     clearSatellites();
-    const blocks = tleBlocks(txt).slice(0, 300); // limit for perf
-    blocks.forEach((b,i)=> addSatelliteFromTLE(b, 0x00e5ff));
-    el('#sat-count').textContent = blocks.length;
+    const blocks = tleBlocks(txt);
+    let count=0;
+    for(const b of blocks){
+      addSatelliteFromTLE(b, 0x00e5ff);
+    }
+    el('#sat-count').textContent = satellites.length;
     el('#last-group').textContent = group.toUpperCase();
   }catch(e){
     alert('Error cargando TLEs: '+e);
@@ -161,4 +172,9 @@ async function loadNORAD(id){
   }
 }
 
-window.SATVIEW = { init, loadGroup, loadNORAD, capture: ()=>captureCanvas(document.querySelector('canvas'), 'satelites.png') };
+function setFilters({altMin, altMax, incMin, incMax}){
+  filters.altMin = Number(altMin); filters.altMax = Number(altMax);
+  filters.incMin = Number(incMin); filters.incMax = Number(incMax);
+}
+
+window.SATVIEW = { init, loadGroup, loadNORAD, capture: ()=>captureCanvas(document.querySelector('canvas'), 'satelites.png'), setFilters };

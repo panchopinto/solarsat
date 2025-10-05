@@ -1,57 +1,30 @@
-# 🌞🛰️ SolarSat — Sistema Solar + Rastreador de Satélites (Frontend)
+# 🌞🛰️ SolarSat — Sistema Solar + Rastreador Satelital + Mapa 2D (Leaflet)
 
-Proyecto web listo para publicar (GitHub Pages / Netlify) que incluye:
-- **☀️ Sistema Solar 3D** con órbitas y panel lateral.
-- **🌍 Visualizador Satelital** con carga de TLEs desde CelesTrak y propagación con `satellite.js`.
-- **🧭 UI colorida con emojis**: botones grandes, tema claro/oscuro, búsqueda por **NORAD ID**.
-- **📷 Captura de imagen** del canvas 3D.
+**NUEVO (v2):**
+- 🗺️ **Mapa 2D con Leaflet** y *ground-track* (trayectoria sobre la Tierra).
+- 🎛️ **Filtros por altitud e inclinación** (mín/máx) tanto en 3D como en 2D.
+- 🔎 **Búsqueda por NORAD** (mantener).
+- 📷 **Captura de canvas** (mantener).
 
-## 🧩 Tech
-- [three.js] (CDN), [satellite.js] (CDN), WebGL.
-- Sin build steps, solo archivos estáticos.
+## Páginas
+- `index.html` → 🌍 Visor 3D de satélites (three.js + satellite.js) **con filtros**.
+- `map.html` → 🗺️ Mapa 2D Leaflet + ground-track en vivo **con filtros**.
+- `planets.html` → ☀️ Sistema Solar 3D (educativo).
 
-## ▶️ Uso local
-Por políticas del navegador, **debes servir los archivos con un servidor local** (CORS).
-Opciones rápidas:
-- Python 3: `python -m http.server 8000` (y abre http://localhost:8000)
-- Node: `npx http-server .`
+## Rápido inicio
+1. Servidor local (evita CORS):
+   - Python: `python -m http.server 8000`
+   - Node: `npx http-server .`
+2. Abre `http://localhost:8000`
+3. Usa los botones: Starlink/NOAA/Weather/Active, o busca por NORAD.
 
-## 🚀 Páginas
-- `index.html` → **🌍 Visualizador Satelital** (carga Starlink, NOAA, Weather, Active).
-- `planets.html` → **☀️ Sistema Solar 3D**.
-
-## 🔌 Fuentes de TLE
-Se cargan desde CelesTrak (TLE "gp.php | FORMAT=tle"). Puedes cambiar o añadir fuentes en `js/satview.js`.
+## Fuentes TLE (CelesTrak)
 - Starlink: `https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle`
 - NOAA: `https://celestrak.org/NORAD/elements/gp.php?GROUP=noaa&FORMAT=tle`
 - Weather: `https://celestrak.org/NORAD/elements/gp.php?GROUP=weather&FORMAT=tle`
 - Active: `https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle`
+- NORAD: `https://celestrak.org/NORAD/elements/gp.php?CATNR=<ID>&FORMAT=tle`
 
-> Nota: Si tu navegador bloquea CORS, usa el servidor local. CelesTrak suele permitirlo correctamente.
+> Si tu navegador bloquea CORS, usa el servidor local o publica en GitHub Pages.
 
-## 🛰️ Búsqueda por NORAD
-En la vista satelital, introduce un **NORAD ID** y pulsa **🔎 Buscar**. Se descargará su TLE desde:
-`https://celestrak.org/NORAD/elements/gp.php?CATNR=<ID>&FORMAT=tle`
-
-## 🎨 Personalización
-- Colores y tema en `css/styles.css`.
-- Constantes de tamaño/escala en `js/planets.js` y `js/satview.js`.
-
-## 📁 Estructura
-```
-solarsat-repo/
-  index.html
-  planets.html
-  css/styles.css
-  js/planets.js
-  js/satview.js
-  js/ui.js
-  assets/ (opcional para imágenes propias)
-```
-
-## 📸 Capturas
-Usa el botón **📷 Captura** para descargar un PNG del canvas actual.
-
----
-
-Hecho con cariño para Pancho 💚. Última actualización: 2025-10-05.
+Hecho con cariño para Pancho 💚 • 2025-10-05

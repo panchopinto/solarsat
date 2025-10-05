@@ -3,34 +3,33 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>🌍🛰️ SolarSat — Visualizador Satelital 3D</title>
+  <title>🗺️ SolarSat — Mapa 2D con Ground-Track</title>
   <link rel="stylesheet" href="css/styles.css"/>
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/satellite.js@5.0.1/dist/satellite.min.js"></script>
 </head>
 <body>
   <div class="header">
     <div class="brand">
-      <div class="dot"></div> SolarSat <span class="small">v2 • 3D</span>
+      <div class="dot"></div> SolarSat <span class="small">v2 • Mapa 2D</span>
     </div>
     <div class="toolbar">
-      <a class="btn accent" href="planets.html">☀️ Sistema Solar</a>
-      <a class="btn" href="map.html">🗺️ Mapa 2D</a>
+      <a class="btn accent" href="index.html">🌍 3D</a>
+      <a class="btn" href="planets.html">☀️ Sistema Solar</a>
       <button class="btn ok" id="btn-starlink">🛰️ Starlink</button>
       <button class="btn" id="btn-noaa">🛰️ NOAA</button>
       <button class="btn" id="btn-weather">⛅ Weather</button>
       <button class="btn" id="btn-active">🟢 Active</button>
       <input id="norad" placeholder="NORAD ID…" class="number"/>
       <button class="btn" id="btn-norad">🔎 Buscar</button>
-      <button class="btn" id="btn-capture">📷 Captura</button>
     </div>
   </div>
 
-  <div class="canvas-wrap"></div>
+  <div id="map"></div>
 
   <aside class="panel">
-    <h2>🛰️ Panel Satelital (3D)</h2>
+    <h2>🗺️ Ground-Track</h2>
     <div class="row"><span class="badge">Grupo: <strong id="last-group">—</strong></span><span class="badge">Satélites: <strong id="sat-count">0</strong></span></div>
     <div class="row">
       <span class="badge">Filtros</span>
@@ -40,28 +39,27 @@
       <input id="incMax" class="number" type="number" value="180" min="0" max="180" step="1" title="Inclinación máxima (°)" />
       <button class="btn" id="applyFilters">🎛️ Aplicar</button>
     </div>
-    <div class="row small">Cargar TLEs desde CelesTrak y propagación en tiempo real con <code>satellite.js</code>.</div>
+    <div class="row small">Trayectoria prevista ±2 horas. Zoom con rueda, mueve el mapa a gusto.</div>
   </aside>
 
   <div class="footer">
-    <div>Hecho con 💚 por Pancho + ChatGPT • WebGL</div>
+    <div>Hecho con 💚 por Pancho + ChatGPT • Leaflet</div>
     <div id="loading" class="badge hidden">⏳ Cargando…</div>
   </div>
 
   <script type="module">
-    import './js/satview.js';
+    import './js/mapview.js';
     import { el, on } from './js/ui.js';
-    window.SATVIEW.init();
+    window.MAPVIEW.init();
 
-    on(el('#btn-starlink'), 'click', ()=> SATVIEW.loadGroup('starlink'));
-    on(el('#btn-noaa'), 'click', ()=> SATVIEW.loadGroup('noaa'));
-    on(el('#btn-weather'), 'click', ()=> SATVIEW.loadGroup('weather'));
-    on(el('#btn-active'), 'click', ()=> SATVIEW.loadGroup('active'));
-    on(el('#btn-norad'), 'click', ()=> SATVIEW.loadNORAD(el('#norad').value.trim()));
-    on(el('#btn-capture'), 'click', ()=> SATVIEW.capture());
+    on(el('#btn-starlink'), 'click', ()=> MAPVIEW.loadGroup('starlink'));
+    on(el('#btn-noaa'), 'click', ()=> MAPVIEW.loadGroup('noaa'));
+    on(el('#btn-weather'), 'click', ()=> MAPVIEW.loadGroup('weather'));
+    on(el('#btn-active'), 'click', ()=> MAPVIEW.loadGroup('active'));
+    on(el('#btn-norad'), 'click', ()=> MAPVIEW.loadNORAD(el('#norad').value.trim()));
 
     on(el('#applyFilters'), 'click', ()=> {
-      SATVIEW.setFilters({
+      MAPVIEW.setFilters({
         altMin: el('#altMin').value,
         altMax: el('#altMax').value,
         incMin: el('#incMin').value,
